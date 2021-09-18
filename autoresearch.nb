@@ -1,0 +1,1865 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     84927,       1857]
+NotebookOptionsPosition[     80187,       1770]
+NotebookOutlinePosition[     80576,       1786]
+CellTagsIndexPosition[     80533,       1783]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Automatic Researcher", "Title",
+ CellChangeTimes->{{3.840912448431569*^9, 
+  3.8409124679852743`*^9}},ExpressionUUID->"50227914-6595-4f7b-b9ea-\
+2329da5a79fd"],
+
+Cell[CellGroupData[{
+
+Cell["Description", "Section",
+ CellChangeTimes->{{3.840913387596912*^9, 
+  3.840913389138958*^9}},ExpressionUUID->"502dbaf6-c4ed-4b1f-91f9-\
+27e533b1aa34"],
+
+Cell["\<\
+It\[CloseCurlyQuote]s 2021 and everyone tells you to do your own research. \
+This is obviously absurd because doing research is hard and you\
+\[CloseCurlyQuote]re not going to bother. This project will solve all of your \
+problems by doing research automatically. You can then present a concise, \
+coherent, and comprehensive breakdown of any subject at moment\
+\[CloseCurlyQuote]s notice to win any argument without reading so much as a \
+title. Now go forth and claim that sweet, sweet social credit!\
+\>", "Text",
+ CellChangeTimes->{{3.840913390844933*^9, 3.840913549784854*^9}, {
+  3.8409136601237297`*^9, 3.840913694787939*^9}, {3.8409137957872972`*^9, 
+  3.8409138303439293`*^9}},ExpressionUUID->"c61fd206-add9-4d92-85da-\
+b2202eeecb39"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Basics", "Section",
+ CellChangeTimes->{{3.840913315121499*^9, 
+  3.840913315525609*^9}},ExpressionUUID->"506122de-c25d-4eda-b194-\
+66f4126bdcc3"],
+
+Cell["Start from keyword", "Item",
+ CellChangeTimes->{{3.840912469524992*^9, 
+  3.840912475542321*^9}},ExpressionUUID->"27d2cdf2-d56b-4d03-85de-\
+3dde8ae4d599"],
+
+Cell["Gather most relevant Wikipedia articles", "Item",
+ CellChangeTimes->{{3.840912469524992*^9, 3.840912483528943*^9}, {
+  3.8409137112743063`*^9, 
+  3.8409137120622263`*^9}},ExpressionUUID->"91b98f3a-40a1-41de-995f-\
+ff95ceeb74e3"],
+
+Cell["Present summary", "Item",
+ CellChangeTimes->{{3.840912469524992*^9, 3.840912483413631*^9}, {
+  3.840912850642962*^9, 3.840912857960383*^9}, {3.840913324727133*^9, 
+  3.8409133267653627`*^9}},ExpressionUUID->"90893445-b16d-48c0-bbfb-\
+807de4a0d5d8"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Goal", "Section",
+ CellChangeTimes->{{3.8409137154663343`*^9, 3.840913717582409*^9}, {
+  3.840913885431493*^9, 
+  3.840913885669209*^9}},ExpressionUUID->"6a64aeb0-3876-49ad-90e4-\
+76e5967c4c54"],
+
+Cell["Final product: cloud deployed web service", "Item",
+ CellChangeTimes->{{3.8409137196293097`*^9, 
+  3.840913751764683*^9}},ExpressionUUID->"11a461e1-7b7f-4ff8-b888-\
+2637bba677b1"],
+
+Cell["Input: keyword", "Item",
+ CellChangeTimes->{{3.8409137196293097`*^9, 
+  3.840913758700762*^9}},ExpressionUUID->"80135f85-645d-48c4-b651-\
+8f4c999c721c"],
+
+Cell[CellGroupData[{
+
+Cell["Output: summary of relevant info and topics in readable form", "Item",
+ CellChangeTimes->{{3.8409137196293097`*^9, 3.8409137707022867`*^9}, {
+  3.840922532317019*^9, 
+  3.8409225323179417`*^9}},ExpressionUUID->"7b6e5ab1-7418-4b72-b27c-\
+f8d4f513595e"],
+
+Cell["Bonus: Link tree for important related topics/articles", "Subitem",
+ CellChangeTimes->{{3.8409137196293097`*^9, 3.8409137707022867`*^9}, {
+  3.8409225329754477`*^9, 
+  3.840922541497326*^9}},ExpressionUUID->"6f54ee52-cb2c-4da8-97dd-\
+d37cbcdbf846"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Plan", "Section",
+ CellChangeTimes->{{3.840913891279513*^9, 3.84091389223172*^9}, {
+  3.840917130161893*^9, 
+  3.840917130485635*^9}},ExpressionUUID->"80f7338f-6de6-4de1-b355-\
+90befac27125"],
+
+Cell["\<\
+Start from Wikipedia article with title closest to given keyword\
+\>", "Item",
+ CellChangeTimes->{{3.840913893889538*^9, 
+  3.840913909688753*^9}},ExpressionUUID->"4ef2b152-5eb0-4d85-b6b3-\
+f2bb796e579a"],
+
+Cell["\<\
+Trawl all links recursively to some (lowish) depth and form connectivity tree \
+for topics\
+\>", "Item",
+ CellChangeTimes->{{3.840913893889538*^9, 
+  3.84091393478652*^9}},ExpressionUUID->"d91f7f0e-913c-42db-ab04-\
+02b57d298db9"],
+
+Cell["Take given number of most relevant articles", "Item",
+ CellChangeTimes->{{3.840913893889538*^9, 3.840913934511732*^9}, {
+  3.840914251459943*^9, 
+  3.840914277639338*^9}},ExpressionUUID->"c5651ad9-95b2-4b68-b47a-\
+14180a8a8c2c"],
+
+Cell[CellGroupData[{
+
+Cell["Summarize articles", "Item",
+ CellChangeTimes->{{3.840913893889538*^9, 3.840913934511732*^9}, {
+  3.840914251459943*^9, 
+  3.84091428543863*^9}},ExpressionUUID->"704a5bc9-9a99-4065-920c-\
+49dfc2391089"],
+
+Cell["Basic: take top section", "Subitem",
+ CellChangeTimes->{{3.840913893889538*^9, 3.840913934511732*^9}, {
+  3.840914251459943*^9, 
+  3.84091430374632*^9}},ExpressionUUID->"c504482f-4466-47c0-b6de-\
+d2dd3f18143d"],
+
+Cell["Advanced: take sentences with most relevant keywords", "Subitem",
+ CellChangeTimes->{{3.840913893889538*^9, 3.840913934511732*^9}, {
+  3.840914251459943*^9, 3.8409143143433857`*^9}, {3.8409225547504168`*^9, 
+  3.840922554751195*^9}},ExpressionUUID->"aaa47c16-6cca-4754-9323-\
+6cd279572de0"]
+}, Open  ]],
+
+Cell["\<\
+After first sentence each major keyword is used, add in summary for relevant \
+article\
+\>", "Item",
+ CellChangeTimes->{{3.840913893889538*^9, 3.840913934511732*^9}, {
+  3.840914251459943*^9, 3.8409143143433857`*^9}, {3.840922558170232*^9, 
+  3.840922619651643*^9}},ExpressionUUID->"3de84635-0d06-425e-a3e8-\
+4476e2d6fbcd"],
+
+Cell["Continue recursively until depth or length limit is reached", "Item",
+ CellChangeTimes->{{3.840913893889538*^9, 3.840913934511732*^9}, {
+  3.840914251459943*^9, 3.8409143143433857`*^9}, {3.840922558170232*^9, 
+  3.840922630610662*^9}},ExpressionUUID->"45a85434-e231-4a79-98dd-\
+8003235742c5"],
+
+Cell["Present information in readable form", "Item",
+ CellChangeTimes->{{3.840913893889538*^9, 3.840913934511732*^9}, {
+  3.840914251459943*^9, 
+  3.840914319402248*^9}},ExpressionUUID->"a38b2436-018a-4b56-ba34-\
+0dc404227cc7"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Testing", "Section",
+ CellChangeTimes->{{3.840914320858629*^9, 
+  3.8409143213625517`*^9}},ExpressionUUID->"932c340b-8633-4138-b695-\
+13ada479af7a"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TextSentences", "[", 
+   RowBox[{"WikipediaData", "[", "\"\<research\>\"", "]"}], "]"}], "[", 
+  RowBox[{"[", 
+   RowBox[{";;", "2"}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.840915432381641*^9, 3.8409154967362556`*^9}},
+ CellLabel->"In[12]:=",ExpressionUUID->"83c16ce2-fbe1-4f5b-bb47-840771682a52"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"Research is \\\"creative and systematic work undertaken to \
+increase the stock of knowledge\\\".\"\>", 
+   ",", "\<\"It involves the collection, organization, and analysis of \
+information to increase understanding of a topic or issue.\"\>"}], 
+  "}"}]], "Output",
+ CellChangeTimes->{{3.840915440759111*^9, 3.8409154978164473`*^9}},
+ CellLabel->"Out[12]=",ExpressionUUID->"af5dd6f2-3822-4df2-a987-d17a09305e6a"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"links", "=", 
+   RowBox[{"WikipediaData", "[", 
+    RowBox[{"\"\<Research\>\"", ",", "\"\<LinksRules\>\"", ",", 
+     RowBox[{"\"\<MaxLevel\>\"", "->", "2"}], ",", 
+     RowBox[{"\"\<MaxLevelItems\>\"", "->", "5"}]}], "]"}]}], ";"}]], "Input",\
+
+ CellChangeTimes->{{3.840915512774719*^9, 3.840915589690433*^9}, {
+   3.840915632110403*^9, 3.840915636786875*^9}, {3.84091616381397*^9, 
+   3.84091619878883*^9}, 3.840916266941472*^9, {3.84091631256525*^9, 
+   3.8409163126222477`*^9}, {3.840918688626182*^9, 3.840918688913095*^9}},
+ CellLabel->"In[83]:=",ExpressionUUID->"04ca4b83-76dd-434c-9b84-5c27d313b7b6"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"g", "=", 
+  RowBox[{"Graph", "[", 
+   RowBox[{"links", ",", 
+    RowBox[{"VertexLabels", "->", 
+     RowBox[{"Placed", "[", 
+      RowBox[{"\"\<Name\>\"", ",", "Tooltip"}], "]"}]}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.840915564597741*^9, 3.840915577258803*^9}, {
+  3.840916063083456*^9, 3.840916063128229*^9}, {3.840921645822687*^9, 
+  3.8409216531526814`*^9}},
+ CellLabel->"In[84]:=",ExpressionUUID->"eb2fc544-2b27-44ce-a2dd-b5451fdeb731"],
+
+Cell[BoxData[
+ GraphicsBox[
+  NamespaceBox["NetworkGraphics",
+   DynamicModuleBox[{Typeset`graph = HoldComplete[
+     Graph[{
+      "Research", "Academic authorship", "Academic freedom", 
+       "Academic journal", "Academic publishing", "Academic ranks", 
+       "Academia", "Academic dishonesty", "Academic ghostwriting", 
+       "14th Amendment to the U.S. Constitution", 
+       "2006 Duke University lacrosse case", "Abigail Thompson", 
+       "Abolitionism in the United States", "ABC-CLIO", "Abstract (summary)", 
+       "Academic", "APA style", "Academic conference", "Academic discipline", 
+       "Aalto University", "Academic degree", "Academic personnel", 
+       "Academic rank"}, {{{1, 2}, {1, 3}, {1, 4}, {1, 5}, {1, 6}, {2, 7}, {2,
+        8}, {2, 9}, {2, 4}, {2, 5}, {3, 10}, {3, 11}, {3, 12}, {3, 13}, {3, 
+       7}, {4, 14}, {4, 15}, {4, 7}, {4, 16}, {4, 2}, {5, 17}, {5, 15}, {5, 
+       2}, {5, 18}, {5, 19}, {6, 20}, {6, 7}, {6, 21}, {6, 22}, {6, 23}}, 
+       Null}, {VertexLabels -> {
+         Placed["Name", Tooltip]}}]]}, 
+    TagBox[GraphicsGroupBox[{
+       {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[0.02210897190952498], 
+        ArrowBox[{{2.2665374340823727`, 1.787561189784369}, {
+         3.0163043700579975`, 1.3521761079710553`}}, 0.040772406500965114`], 
+        ArrowBox[{{2.2665374340823727`, 1.787561189784369}, {
+         0.9449508034940208, 1.1290505111565672`}}, 0.040772406500965114`], 
+        ArrowBox[{{2.2665374340823727`, 1.787561189784369}, {
+         2.5947825963877564`, 0.9377102097673067}}, 0.040772406500965114`], 
+        ArrowBox[{{2.2665374340823727`, 1.787561189784369}, {
+         3.629095082222063, 2.073979983776757}}, 0.040772406500965114`], 
+        ArrowBox[{{2.2665374340823727`, 1.787561189784369}, {
+         1.5285765010409889`, 2.857051636337814}}, 0.040772406500965114`], 
+        ArrowBox[BezierCurveBox[{{3.0163043700579975`, 1.3521761079710553`}, {
+         2.8736985652054248`, 1.075627803452883}, {2.5947825963877564`, 
+         0.9377102097673067}}], 0.040772406500965114`], 
+        ArrowBox[BezierCurveBox[{{3.0163043700579975`, 1.3521761079710553`}, {
+         3.2040057574828653`, 1.8138458084490356`}, {3.629095082222063, 
+         2.073979983776757}}], 0.040772406500965114`], 
+        ArrowBox[{{3.0163043700579975`, 1.3521761079710553`}, {
+         1.8975975106464205`, 1.6338803221077507`}}, 0.040772406500965114`], 
+        ArrowBox[{{3.0163043700579975`, 1.3521761079710553`}, {
+         3.6493272138907917`, 0.5638219036536214}}, 0.040772406500965114`], 
+        ArrowBox[{{3.0163043700579975`, 1.3521761079710553`}, {
+         3.9514499350100962`, 1.015046254870838}}, 0.040772406500965114`], 
+        ArrowBox[{{0.9449508034940208, 1.1290505111565672`}, {
+         1.8975975106464205`, 1.6338803221077507`}}, 0.040772406500965114`], 
+        ArrowBox[{{0.9449508034940208, 1.1290505111565672`}, {0., 
+         0.9173359690834474}}, 0.040772406500965114`], 
+        ArrowBox[{{0.9449508034940208, 1.1290505111565672`}, {
+         0.22084823883545468`, 0.490135292125115}}, 0.040772406500965114`], 
+        ArrowBox[{{0.9449508034940208, 1.1290505111565672`}, {
+         0.07567504453904483, 1.401521291426458}}, 0.040772406500965114`], 
+        ArrowBox[{{0.9449508034940208, 1.1290505111565672`}, {
+         0.6362474291885267, 0.25646665215178954`}}, 0.040772406500965114`], 
+        ArrowBox[BezierCurveBox[{{2.5947825963877564`, 0.9377102097673067}, {
+         2.7373884012403225`, 1.2142585142854483`}, {3.0163043700579975`, 
+         1.3521761079710553`}}], 0.040772406500965114`], 
+        ArrowBox[{{2.5947825963877564`, 0.9377102097673067}, {
+         1.8975975106464205`, 1.6338803221077507`}}, 0.040772406500965114`], 
+        ArrowBox[{{2.5947825963877564`, 0.9377102097673067}, {
+         2.9043753867896487`, 0.}}, 0.040772406500965114`], 
+        ArrowBox[{{2.5947825963877564`, 0.9377102097673067}, {
+         3.4051406871140903`, 1.3997404999415584`}}, 0.040772406500965114`], 
+        ArrowBox[{{2.5947825963877564`, 0.9377102097673067}, {
+         2.359574167293106, 0.0680383096103574}}, 0.040772406500965114`], 
+        ArrowBox[BezierCurveBox[{{3.629095082222063, 2.073979983776757}, {
+         3.4413936947971737`, 1.6123102832987621`}, {3.0163043700579975`, 
+         1.3521761079710553`}}], 0.040772406500965114`], 
+        ArrowBox[{{3.629095082222063, 2.073979983776757}, {
+         3.4051406871140903`, 1.3997404999415584`}}, 0.040772406500965114`], 
+        ArrowBox[{{3.629095082222063, 2.073979983776757}, {4.484300255992822, 
+         2.5521106946741896`}}, 0.040772406500965114`], 
+        ArrowBox[{{3.629095082222063, 2.073979983776757}, {4.063897277713689, 
+         2.8920119854465085`}}, 0.040772406500965114`], 
+        ArrowBox[{{3.629095082222063, 2.073979983776757}, {4.610391503935056, 
+         2.0486004437760528`}}, 0.040772406500965114`], 
+        ArrowBox[{{1.5285765010409889`, 2.857051636337814}, {
+         1.8975975106464205`, 1.6338803221077507`}}, 0.040772406500965114`], 
+        ArrowBox[{{1.5285765010409889`, 2.857051636337814}, {
+         1.8312363710158812`, 3.710340995738628}}, 0.040772406500965114`], 
+        ArrowBox[{{1.5285765010409889`, 2.857051636337814}, {
+         0.9024285877331992, 3.5882199799457464`}}, 0.040772406500965114`], 
+        ArrowBox[{{1.5285765010409889`, 2.857051636337814}, {
+         1.3244201877534802`, 3.8118699474834816`}}, 0.040772406500965114`], 
+        ArrowBox[{{1.5285765010409889`, 2.857051636337814}, {
+         0.678408371637419, 3.156308386593653}}, 0.040772406500965114`]}, 
+       {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[0.7]}], 
+        TagBox[
+         TooltipBox[
+          DiskBox[{2.2665374340823727, 1.787561189784369}, 
+           0.040772406500965114],
+          "\"Research\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Research", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          DiskBox[{3.0163043700579975, 1.3521761079710553}, 
+           0.040772406500965114],
+          "\"Academic authorship\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic authorship", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          DiskBox[{0.9449508034940208, 1.1290505111565672}, 
+           0.040772406500965114],
+          "\"Academic freedom\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic freedom", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          DiskBox[{2.5947825963877564, 0.9377102097673067}, 
+           0.040772406500965114],
+          "\"Academic journal\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic journal", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          DiskBox[{3.629095082222063, 2.073979983776757}, 
+           0.040772406500965114],
+          "\"Academic publishing\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic publishing", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          DiskBox[{1.5285765010409889, 2.857051636337814}, 
+           0.040772406500965114],
+          "\"Academic ranks\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic ranks", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          DiskBox[{1.8975975106464205, 1.6338803221077507}, 
+           0.040772406500965114],
+          "\"Academia\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academia", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          DiskBox[{3.6493272138907917, 0.5638219036536214}, 
+           0.040772406500965114],
+          "\"Academic dishonesty\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic dishonesty", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          DiskBox[{3.9514499350100962, 1.015046254870838}, 
+           0.040772406500965114],
+          "\"Academic ghostwriting\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic ghostwriting", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[DiskBox[{0., 0.9173359690834474}, 0.040772406500965114],
+          "\"14th Amendment to the U.S. Constitution\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "14th Amendment to the U.S. Constitution", 
+          "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          DiskBox[{0.22084823883545468, 0.490135292125115}, 
+           0.040772406500965114],
+          "\"2006 Duke University lacrosse case\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "2006 Duke University lacrosse case", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          DiskBox[{0.07567504453904483, 1.401521291426458}, 
+           0.040772406500965114],
+          "\"Abigail Thompson\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Abigail Thompson", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          DiskBox[{0.6362474291885267, 0.25646665215178954}, 
+           0.040772406500965114],
+          "\"Abolitionism in the United States\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Abolitionism in the United States", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[DiskBox[{2.9043753867896487, 0.}, 0.040772406500965114],
+          "\"ABC-CLIO\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "ABC-CLIO", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          DiskBox[{3.4051406871140903, 1.3997404999415584}, 
+           0.040772406500965114],
+          "\"Abstract (summary)\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Abstract (summary)", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          DiskBox[{2.359574167293106, 0.0680383096103574}, 
+           0.040772406500965114],
+          "\"Academic\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          DiskBox[{4.484300255992822, 2.5521106946741896}, 
+           0.040772406500965114],
+          "\"APA style\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "APA style", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          DiskBox[{4.063897277713689, 2.8920119854465085}, 
+           0.040772406500965114],
+          "\"Academic conference\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic conference", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          DiskBox[{4.610391503935056, 2.0486004437760528}, 
+           0.040772406500965114],
+          "\"Academic discipline\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic discipline", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          DiskBox[{1.8312363710158812, 3.710340995738628}, 
+           0.040772406500965114],
+          "\"Aalto University\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Aalto University", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          DiskBox[{0.9024285877331992, 3.5882199799457464}, 
+           0.040772406500965114],
+          "\"Academic degree\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic degree", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          DiskBox[{1.3244201877534802, 3.8118699474834816}, 
+           0.040772406500965114],
+          "\"Academic personnel\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic personnel", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          DiskBox[{0.678408371637419, 3.156308386593653}, 
+           0.040772406500965114],
+          "\"Academic rank\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic rank", "Tooltip"]& ]}}],
+     MouseAppearanceTag["NetworkGraphics"]],
+    AllowKernelInitialization->False]],
+  DefaultBaseStyle->{
+   "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> Hue[0.8, 1., 0.6]},
+  FormatType->TraditionalForm,
+  FrameTicks->None,
+  ImageSize->{263., Automatic}]], "Output",
+ CellChangeTimes->{
+  3.840915577809807*^9, 3.8409156439102993`*^9, 3.8409160635089283`*^9, 
+   3.8409162542560453`*^9, {3.840916296402295*^9, 3.840916315337343*^9}, 
+   3.840918690529277*^9},
+ CellLabel->"Out[84]=",ExpressionUUID->"fc83b63d-0180-414f-ba2b-7e8a7cb72f58"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"CommunityGraphPlot", "[", "g", "]"}]], "Input",
+ CellChangeTimes->{{3.840916066376358*^9, 3.8409160690595617`*^9}, {
+  3.840916113841259*^9, 3.840916116522149*^9}, {3.840916260516685*^9, 
+  3.840916260798657*^9}},
+ CellLabel->"In[85]:=",ExpressionUUID->"4e92d1e1-ddd3-466f-8c46-537619af3737"],
+
+Cell[BoxData[
+ GraphicsBox[{{
+    {EdgeForm[GrayLevel[0.5]], FaceForm[None], 
+     FilledCurveBox[
+      BSplineCurve[{{1.5754410892863222`, 1.694003788295801}, {
+       1.5754410892863222`, 1.9041931899102584`}, {1.2406829775546113`, 
+       3.2156800037619337`}, {1.030493575940154, 3.2156800037619337`}, {
+       0.6351648501476858, 3.1754756255910825`}, {-0.10509470080722862`, 
+       2.1730343819681006`}, {-0.10509470080722862`, 
+       1.9628449803536434`}, {-0.094035952783064, 1.5178192516107127`}, {
+       0.07836764084784252, 1.1431077758070987`}, {0.7825619332051762, 
+       0.4365210061820447}, {1.1786998912477957`, 0.4130934775456184}, {
+       1.3888892928622532`, 0.4130934775456184}, {1.5190548807414672`, 
+       1.1088883490558046`}}, SplineClosed -> True]]}, 
+    {EdgeForm[GrayLevel[0.5]], FaceForm[None], 
+     FilledCurveBox[
+      BSplineCurve[{{2.746517727286447, 2.167260515124437}, {
+       2.956707128900904, 2.167260515124437}, {3.8011741870969815`, 
+       2.696256731973005}, {3.8011741870969815`, 2.906446133587462}, {
+       3.6560120891817736`, 3.3032345478579024`}, {3.3313141762640877`, 
+       3.6017368034709323`}, {2.9456928947225203`, 3.7130872539865503`}, {
+       2.7355034931080633`, 3.7130872539865503`}, {2.7355034931080633`, 
+       3.5028978523720933`}}, SplineClosed -> True]]}, 
+    {EdgeForm[GrayLevel[0.5]], FaceForm[None], 
+     FilledCurveBox[
+      BSplineCurve[{{2.86632377372832, 0.875993054888676}, {
+       2.7472917319725916`, 0.10509470080722862`}, {
+       2.7472917319725916`, -0.10509470080722862`}, {
+       2.9574811335870486`, -0.10509470080722862`}, {3.3426037891378177`, 
+       0.023785510796027295`}, {3.671387001961631, 0.31814651599135424`}, {
+       3.799726009773443, 0.7109546285702898}, {3.799726009773443, 
+       0.921144030184747}, {3.589536608158986, 0.921144030184747}}, 
+       SplineClosed -> True]]}}, {
+    {Hue[0.6, 0.7, 0.5], Opacity[0.7], 
+     Arrowheads[{{0.02369508493099855, 0.8}}], 
+     ArrowBox[{{1.4703463884790935`, 1.7990984891030297`}, {
+      1.4139601799342385`, 1.2139830498630333`}}], 
+     ArrowBox[BezierCurveBox[{{1.4703463884790935`, 1.7990984891030297`}, {
+      1.8456144099932072`, 1.5420484553476341`}, {2.220882431507321, 
+      1.2849984215922385`}, {2.5961504530214348`, 1.027948387836843}, {
+      2.9714184745355485`, 0.7708983540814474}},
+      SplineDegree->2]], 
+     ArrowBox[{{1.4703463884790935`, 1.7990984891030297`}, {
+      1.2635530425959116`, 2.418599156026465}}], 
+     ArrowBox[{{1.4703463884790935`, 1.7990984891030297`}, {
+      0.7227839758202235, 1.7607387096277822`}}], 
+     ArrowBox[BezierCurveBox[{{1.4703463884790935`, 1.7990984891030297`}, {
+      1.7589337308264659`, 1.974678848080007}, {2.135247591316517, 
+      2.1387974644958385`}, {2.511561451806569, 2.30291608091167}, {
+      2.960401080702511, 2.8563936601191715`}},
+      SplineDegree->2]], 
+     ArrowBox[BezierCurveBox[{{1.4139601799342385`, 1.2139830498630333`}, {
+      1.1406686386987444`, 1.7915580408991645`}, {1.2635530425959116`, 
+      2.418599156026465}}]], 
+     ArrowBox[BezierCurveBox[{{1.4139601799342385`, 1.2139830498630333`}, {
+      0.9784631686589147, 1.3737033483057113`}, {0.7227839758202235, 
+      1.7607387096277822`}}]], 
+     ArrowBox[BezierCurveBox[{{1.4139601799342385`, 1.2139830498630333`}, {
+      1.7589337308264659`, 1.974678848080007}, {2.135247591316517, 
+      2.1387974644958385`}, {2.511561451806569, 2.30291608091167}, {
+      2.8516124280936754`, 2.2723552159316656`}},
+      SplineDegree->2]], 
+     ArrowBox[{{1.4139601799342385`, 1.2139830498630333`}, {
+      0.8876566340124048, 0.5416157069892733}}], 
+     ArrowBox[{{1.4139601799342385`, 1.2139830498630333`}, {
+      1.2837945920550244`, 0.518188178352847}}], 
+     ArrowBox[BezierCurveBox[{{2.9714184745355485`, 0.7708983540814474}, {
+      2.9414669629250803`, 1.1462625695440019`}, {2.911515451314612, 
+      1.5216267850065566`}, {2.8815639397041437`, 1.896991000469111}, {
+      2.8516124280936754`, 2.2723552159316656`}},
+      SplineDegree->2]], 
+     ArrowBox[{{2.9714184745355485`, 0.7708983540814474}, {2.85238643277982, 
+      0.}}], ArrowBox[{{2.9714184745355485`, 0.7708983540814474}, {
+      3.2375090883305893`, 0.1288802116032559}}], 
+     ArrowBox[{{2.9714184745355485`, 0.7708983540814474}, {
+      3.5662923011544025`, 0.42324121679858284`}}], 
+     ArrowBox[{{2.9714184745355485`, 0.7708983540814474}, {
+      3.6946313089662146`, 0.8160493293775184}}], 
+     ArrowBox[BezierCurveBox[{{1.2635530425959116`, 2.418599156026465}, {
+      1.536844583831401, 1.8410241649903367`}, {1.4139601799342385`, 
+      1.2139830498630333`}}]], 
+     ArrowBox[BezierCurveBox[{{1.2635530425959116`, 2.418599156026465}, {
+      1.7589337308264659`, 1.974678848080007}, {2.135247591316517, 
+      2.1387974644958385`}, {2.511561451806569, 2.30291608091167}, {
+      2.8516124280936754`, 2.2723552159316656`}},
+      SplineDegree->2]], 
+     ArrowBox[{{1.2635530425959116`, 2.418599156026465}, {0.7402595509549144, 
+      3.070380924783854}}], 
+     ArrowBox[{{1.2635530425959116`, 2.418599156026465}, {0.5715438359414557, 
+      2.378966413282056}}], 
+     ArrowBox[{{1.2635530425959116`, 2.418599156026465}, {1.1355882767473826`,
+       3.1105853029547053`}}], 
+     ArrowBox[BezierCurveBox[{{0.7227839758202235, 1.7607387096277822`}, {
+      1.1582809870955375`, 1.60101841118511}, {1.4139601799342385`, 
+      1.2139830498630333`}}]], 
+     ArrowBox[{{0.7227839758202235, 1.7607387096277822`}, {0.5715438359414557,
+       2.378966413282056}}], 
+     ArrowBox[{{0.7227839758202235, 1.7607387096277822`}, {0., 
+      2.067939681160872}}], 
+     ArrowBox[{{0.7227839758202235, 1.7607387096277822`}, {
+      0.011058748024164622`, 1.6229139524179415`}}], 
+     ArrowBox[{{0.7227839758202235, 1.7607387096277822`}, {
+      0.18346234165507114`, 1.2482024766143274`}}], 
+     ArrowBox[{{2.960401080702511, 2.8563936601191715`}, {2.8516124280936754`,
+       2.2723552159316656`}}], 
+     ArrowBox[{{2.960401080702511, 2.8563936601191715`}, {2.840598193915292, 
+      3.6079925531793218`}}], 
+     ArrowBox[{{2.960401080702511, 2.8563936601191715`}, {3.226219475456859, 
+      3.496642102663704}}], 
+     ArrowBox[{{2.960401080702511, 2.8563936601191715`}, {3.550917388374545, 
+      3.198139847050674}}], 
+     ArrowBox[{{2.960401080702511, 2.8563936601191715`}, {3.696079486289753, 
+      2.8013514327802334`}}]}, 
+    {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[0.7]}], 
+     TagBox[
+      TooltipBox[
+       {Hue[0, 1, 0.8], EdgeForm[{Hue[0, 1, 0.8], Opacity[1]}], 
+        DiskBox[{1.4703463884790935, 1.7990984891030297}, 
+         0.03503156693574287]},
+       "\"Research\"",
+       TooltipStyle->"TextStyling"],
+      Annotation[#, "Research", "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       {Hue[0, 1, 0.8], EdgeForm[{Hue[0, 1, 0.8], Opacity[1]}], 
+        DiskBox[{1.4139601799342385, 1.2139830498630333}, 
+         0.03503156693574287]},
+       "\"Academic authorship\"",
+       TooltipStyle->"TextStyling"],
+      Annotation[#, "Academic authorship", "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       {Hue[0.8, 0.6, 0.8], EdgeForm[{Hue[0.8, 0.6, 0.8], Opacity[1]}], 
+        DiskBox[{2.9714184745355485, 0.7708983540814474}, 
+         0.03503156693574287]},
+       "\"Academic freedom\"",
+       TooltipStyle->"TextStyling"],
+      Annotation[#, "Academic freedom", "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       {Hue[0, 1, 0.8], EdgeForm[{Hue[0, 1, 0.8], Opacity[1]}], 
+        DiskBox[{1.2635530425959116, 2.418599156026465}, 0.03503156693574287]},
+       "\"Academic journal\"",
+       TooltipStyle->"TextStyling"],
+      Annotation[#, "Academic journal", "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       {Hue[0, 1, 0.8], EdgeForm[{Hue[0, 1, 0.8], Opacity[1]}], 
+        DiskBox[{0.7227839758202235, 1.7607387096277822}, 
+         0.03503156693574287]},
+       "\"Academic publishing\"",
+       TooltipStyle->"TextStyling"],
+      Annotation[#, "Academic publishing", "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       {Hue[0.14, 1, 0.9], EdgeForm[{Hue[0.14, 1, 0.9], Opacity[1]}], 
+        DiskBox[{2.960401080702511, 2.8563936601191715}, 0.03503156693574287]},
+       "\"Academic ranks\"",
+       TooltipStyle->"TextStyling"],
+      Annotation[#, "Academic ranks", "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       {Hue[0.14, 1, 0.9], EdgeForm[{Hue[0.14, 1, 0.9], Opacity[1]}], 
+        DiskBox[{2.8516124280936754, 2.2723552159316656}, 
+         0.03503156693574287]},
+       "\"Academia\"",
+       TooltipStyle->"TextStyling"],
+      Annotation[#, "Academia", "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       {Hue[0, 1, 0.8], EdgeForm[{Hue[0, 1, 0.8], Opacity[1]}], 
+        DiskBox[{0.8876566340124048, 0.5416157069892733}, 
+         0.03503156693574287]},
+       "\"Academic dishonesty\"",
+       TooltipStyle->"TextStyling"],
+      Annotation[#, "Academic dishonesty", "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       {Hue[0, 1, 0.8], EdgeForm[{Hue[0, 1, 0.8], Opacity[1]}], 
+        DiskBox[{1.2837945920550244, 0.518188178352847}, 0.03503156693574287]},
+       "\"Academic ghostwriting\"",
+       TooltipStyle->"TextStyling"],
+      Annotation[#, "Academic ghostwriting", "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       {Hue[0.8, 0.6, 0.8], EdgeForm[{Hue[0.8, 0.6, 0.8], Opacity[1]}], 
+        DiskBox[{2.85238643277982, 0.}, 0.03503156693574287]},
+       "\"14th Amendment to the U.S. Constitution\"",
+       TooltipStyle->"TextStyling"],
+      Annotation[#, "14th Amendment to the U.S. Constitution", "Tooltip"]& ], 
+     
+     TagBox[
+      TooltipBox[
+       {Hue[0.8, 0.6, 0.8], EdgeForm[{Hue[0.8, 0.6, 0.8], Opacity[1]}], 
+        DiskBox[{3.2375090883305893, 0.1288802116032559}, 
+         0.03503156693574287]},
+       "\"2006 Duke University lacrosse case\"",
+       TooltipStyle->"TextStyling"],
+      Annotation[#, "2006 Duke University lacrosse case", "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       {Hue[0.8, 0.6, 0.8], EdgeForm[{Hue[0.8, 0.6, 0.8], Opacity[1]}], 
+        DiskBox[{3.5662923011544025, 0.42324121679858284}, 
+         0.03503156693574287]},
+       "\"Abigail Thompson\"",
+       TooltipStyle->"TextStyling"],
+      Annotation[#, "Abigail Thompson", "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       {Hue[0.8, 0.6, 0.8], EdgeForm[{Hue[0.8, 0.6, 0.8], Opacity[1]}], 
+        DiskBox[{3.6946313089662146, 0.8160493293775184}, 
+         0.03503156693574287]},
+       "\"Abolitionism in the United States\"",
+       TooltipStyle->"TextStyling"],
+      Annotation[#, "Abolitionism in the United States", "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       {Hue[0, 1, 0.8], EdgeForm[{Hue[0, 1, 0.8], Opacity[1]}], 
+        DiskBox[{0.7402595509549144, 3.070380924783854}, 0.03503156693574287]},
+       "\"ABC-CLIO\"",
+       TooltipStyle->"TextStyling"],
+      Annotation[#, "ABC-CLIO", "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       {Hue[0, 1, 0.8], EdgeForm[{Hue[0, 1, 0.8], Opacity[1]}], 
+        DiskBox[{0.5715438359414557, 2.378966413282056}, 0.03503156693574287]},
+       "\"Abstract (summary)\"",
+       TooltipStyle->"TextStyling"],
+      Annotation[#, "Abstract (summary)", "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       {Hue[0, 1, 0.8], EdgeForm[{Hue[0, 1, 0.8], Opacity[1]}], 
+        DiskBox[{1.1355882767473826, 3.1105853029547053}, 
+         0.03503156693574287]},
+       "\"Academic\"",
+       TooltipStyle->"TextStyling"],
+      Annotation[#, "Academic", "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       {Hue[0, 1, 0.8], EdgeForm[{Hue[0, 1, 0.8], Opacity[1]}], 
+        DiskBox[{0., 2.067939681160872}, 0.03503156693574287]},
+       "\"APA style\"",
+       TooltipStyle->"TextStyling"],
+      Annotation[#, "APA style", "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       {Hue[0, 1, 0.8], EdgeForm[{Hue[0, 1, 0.8], Opacity[1]}], 
+        DiskBox[{0.011058748024164622, 1.6229139524179415}, 
+         0.03503156693574287]},
+       "\"Academic conference\"",
+       TooltipStyle->"TextStyling"],
+      Annotation[#, "Academic conference", "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       {Hue[0, 1, 0.8], EdgeForm[{Hue[0, 1, 0.8], Opacity[1]}], 
+        DiskBox[{0.18346234165507114, 1.2482024766143274}, 
+         0.03503156693574287]},
+       "\"Academic discipline\"",
+       TooltipStyle->"TextStyling"],
+      Annotation[#, "Academic discipline", "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       {Hue[0.14, 1, 0.9], EdgeForm[{Hue[0.14, 1, 0.9], Opacity[1]}], 
+        DiskBox[{2.840598193915292, 3.6079925531793218}, 0.03503156693574287]},
+       "\"Aalto University\"",
+       TooltipStyle->"TextStyling"],
+      Annotation[#, "Aalto University", "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       {Hue[0.14, 1, 0.9], EdgeForm[{Hue[0.14, 1, 0.9], Opacity[1]}], 
+        DiskBox[{3.226219475456859, 3.496642102663704}, 0.03503156693574287]},
+       
+       "\"Academic degree\"",
+       TooltipStyle->"TextStyling"],
+      Annotation[#, "Academic degree", "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       {Hue[0.14, 1, 0.9], EdgeForm[{Hue[0.14, 1, 0.9], Opacity[1]}], 
+        DiskBox[{3.550917388374545, 3.198139847050674}, 0.03503156693574287]},
+       
+       "\"Academic personnel\"",
+       TooltipStyle->"TextStyling"],
+      Annotation[#, "Academic personnel", "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       {Hue[0.14, 1, 0.9], EdgeForm[{Hue[0.14, 1, 0.9], Opacity[1]}], 
+        DiskBox[{3.696079486289753, 2.8013514327802334}, 0.03503156693574287]},
+       "\"Academic rank\"",
+       TooltipStyle->"TextStyling"],
+      Annotation[#, "Academic rank", "Tooltip"]& ]}}},
+  FormatType->TraditionalForm,
+  FrameTicks->None,
+  ImageSize->{277., Automatic}]], "Output",
+ CellChangeTimes->{3.840916069477347*^9, 3.8409162651831512`*^9, 
+  3.840916318631755*^9, 3.840918692160694*^9},
+ CellLabel->"Out[85]=",ExpressionUUID->"f4980910-5306-46cc-a449-8d3e9107d9ce"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"f", "=", 
+  RowBox[{"?", "*Centrality*"}]}]], "Input",
+ CellChangeTimes->{{3.840917671525218*^9, 3.840917721063422*^9}},
+ CellLabel->"In[39]:=",ExpressionUUID->"2e4c3243-377e-4c7b-8e18-38d9a620ff14"],
+
+Cell[BoxData[
+ StyleBox[
+  FrameBox[GridBox[{
+     {
+      DynamicModuleBox[{Typeset`open$$ = True}, 
+       PaneSelectorBox[{False->
+        ButtonBox[
+         RowBox[{
+          
+          DynamicBox[FEPrivate`FrontEndResource[
+           "FEBitmaps", "RightPointerOpener"]], " ", 
+          StyleBox["System`", "InformationGridGroupHeader"]}],
+         Appearance->None,
+         BaseStyle->"InformationGridLink",
+         ButtonFunction:>FEPrivate`Set[Typeset`open$$, True],
+         Evaluator->Automatic,
+         Method->"Preemptive"], True->
+        PaneBox[GridBox[{
+           {
+            ButtonBox[
+             RowBox[{
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "DownPointerOpener"],
+               ImageSizeCache->{10., {3., 7.}}], " ", 
+              StyleBox["System`", "InformationGridGroupHeader"]}],
+             Appearance->None,
+             BaseStyle->"InformationGridLink",
+             ButtonFunction:>FEPrivate`Set[Typeset`open$$, False],
+             Evaluator->Automatic,
+             Method->"Preemptive"]},
+           {
+            PaneBox[GridBox[{
+               {
+                ButtonBox[
+                 StyleBox["BetweennessCentrality", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-6b940bc2-d689-4de1-8b6d-860ea91670e0", {
+                   "BetweennessCentrality", "System`"}, False},
+                 ButtonNote->"System`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["EccentricityCentrality", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-6b940bc2-d689-4de1-8b6d-860ea91670e0", {
+                   "EccentricityCentrality", "System`"}, False},
+                 ButtonNote->"System`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["HITSCentrality", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-6b940bc2-d689-4de1-8b6d-860ea91670e0", {
+                   "HITSCentrality", "System`"}, False},
+                 ButtonNote->"System`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["PageRankCentrality", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-6b940bc2-d689-4de1-8b6d-860ea91670e0", {
+                   "PageRankCentrality", "System`"}, False},
+                 ButtonNote->"System`",
+                 Evaluator->Automatic]},
+               {
+                ButtonBox[
+                 StyleBox["ClosenessCentrality", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-6b940bc2-d689-4de1-8b6d-860ea91670e0", {
+                   "ClosenessCentrality", "System`"}, False},
+                 ButtonNote->"System`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 
+                 StyleBox["EdgeBetweennessCentrality", 
+                  "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-6b940bc2-d689-4de1-8b6d-860ea91670e0", {
+                   "EdgeBetweennessCentrality", "System`"}, False},
+                 ButtonNote->"System`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["KatzCentrality", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-6b940bc2-d689-4de1-8b6d-860ea91670e0", {
+                   "KatzCentrality", "System`"}, False},
+                 ButtonNote->"System`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["RadialityCentrality", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-6b940bc2-d689-4de1-8b6d-860ea91670e0", {
+                   "RadialityCentrality", "System`"}, False},
+                 ButtonNote->"System`",
+                 Evaluator->Automatic]},
+               {
+                ButtonBox[
+                 StyleBox["DegreeCentrality", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-6b940bc2-d689-4de1-8b6d-860ea91670e0", {
+                   "DegreeCentrality", "System`"}, False},
+                 ButtonNote->"System`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["EigenvectorCentrality", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-6b940bc2-d689-4de1-8b6d-860ea91670e0", {
+                   "EigenvectorCentrality", "System`"}, False},
+                 ButtonNote->"System`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["LinkRankCentrality", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-6b940bc2-d689-4de1-8b6d-860ea91670e0", {
+                   "LinkRankCentrality", "System`"}, False},
+                 ButtonNote->"System`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["StatusCentrality", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-6b940bc2-d689-4de1-8b6d-860ea91670e0", {
+                   "StatusCentrality", "System`"}, False},
+                 ButtonNote->"System`",
+                 Evaluator->Automatic]}
+              },
+              DefaultBaseStyle->"Text",
+              
+              GridBoxAlignment->{
+               "Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
+              GridBoxItemSize->{"Columns" -> {{
+                   Scaled[0.2375]}}}],
+             ImageMargins->{{10, 0}, {0, 2}}]}
+          },
+          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}}],
+         FrameMargins->{{0, 0}, {8, 0}}]}, Dynamic[Typeset`open$$],
+        ImageSize->Automatic]]}
+    },
+    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
+    GridBoxDividers->{"ColumnsIndexed" -> {{False}}, "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.5599999999999999]}, 
+        Offset[0.27999999999999997`]}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.8]}, 
+        Offset[0.2]}}],
+   BaseStyle->"InformationTitleFrame"], "InformationGridPlain"]], "Output",
+ CellChangeTimes->{{3.840917676987544*^9, 3.8409177215522623`*^9}},
+ CellLabel->"Out[39]=",ExpressionUUID->"74a39498-4ade-4e0a-8c09-5e64035873ed"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{
+    "show", " ", "importance", " ", "graph", " ", "and", " ", "list", " ", 
+     "important", " ", "articles", " ", "for", " ", "all", " ", "built"}], 
+    "-", 
+    RowBox[{"in", " ", "closeness", " ", "measures"}]}], " ", "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"Column", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Row", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"Text", "@", "#"}], ",", 
+         RowBox[{"showImportance", "[", 
+          RowBox[{"g", ",", "#"}], "]"}], ",", 
+         RowBox[{
+          RowBox[{"o", "=", 
+           RowBox[{"getOrder", "[", 
+            RowBox[{"g", ",", "#"}], "]"}]}], ";", 
+          RowBox[{"Column", "[", 
+           RowBox[{"o", "[", 
+            RowBox[{"[", 
+             RowBox[{";;", 
+              RowBox[{"If", "[", 
+               RowBox[{
+                RowBox[{
+                 RowBox[{"Length", "[", "o", "]"}], ">", "10"}], ",", "10", 
+                ",", 
+                RowBox[{"Length", "[", "o", "]"}]}], "]"}]}], "]"}], "]"}], 
+           "]"}]}]}], "}"}], "]"}], "&"}], "/@", 
+     RowBox[{"{", "\[IndentingNewLine]", 
+      RowBox[{
+      "PageRankCentrality", ",", "EigenvectorCentrality", ",", 
+       "BetweennessCentrality", ",", "ClosenessCentrality", ",", 
+       "LinkRankCentrality", ",", "DegreeCentrality", ",", 
+       "EccentricityCentrality", ",", "EdgeBetweennessCentrality", ",", 
+       "HITSCentrality", ",", "KatzCentrality", ",", "RadialityCentrality", 
+       ",", "StatusCentrality"}], "\[IndentingNewLine]", "}"}]}], "]"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{"pretty", " ", "broken"}], ",", " ", 
+     RowBox[{
+     "PageRankCentrality", " ", "seems", " ", "best", " ", "though"}]}], " ", 
+    "*)"}]}]}]], "Input",
+ CellChangeTimes->{{3.840921575584301*^9, 
+  3.840921631488502*^9}},ExpressionUUID->"40834445-e63e-4041-b622-\
+217761f3b6ea"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"getLinks", "[", 
+    RowBox[{"article_", ",", "depth_", ",", "breadth_"}], "]"}], ":=", 
+   RowBox[{"WikipediaData", "[", 
+    RowBox[{"article", ",", "\n", "\t", "\"\<LinksRules\>\"", ",", 
+     RowBox[{"\"\<MaxLevel\>\"", "->", "depth"}], ",", 
+     RowBox[{"\"\<MaxLevelItems\>\"", "->", "5"}]}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"getLinksGraph", "[", "links_", "]"}], ":=", 
+  RowBox[{"Graph", "[", 
+   RowBox[{"links", ",", 
+    RowBox[{"VertexLabels", "->", 
+     RowBox[{"Placed", "[", 
+      RowBox[{"\"\<Name\>\"", ",", "Tooltip"}], "]"}]}]}], "]"}]}], "\n", 
+ RowBox[{
+  RowBox[{"showImportance", "[", 
+   RowBox[{"graph_", ",", "func_"}], "]"}], ":=", 
+  RowBox[{"HighlightGraph", "[", 
+   RowBox[{"graph", ",", 
+    RowBox[{"VertexList", "@", "graph"}], ",", "\n", "\t", 
+    RowBox[{"VertexSize", "->", 
+     RowBox[{"Thread", "[", 
+      RowBox[{
+       RowBox[{"VertexList", "@", "graph"}], "->", 
+       RowBox[{"Rescale", "[", 
+        RowBox[{"func", "@", "graph"}], "]"}]}], "]"}]}], ",", 
+    RowBox[{"ImageSize", "->", "Medium"}]}], "]"}]}], "\n", 
+ RowBox[{
+  RowBox[{"getOrder", "[", 
+   RowBox[{"graph_", ",", "func_"}], "]"}], ":=", 
+  RowBox[{"Part", "[", 
+   RowBox[{
+    RowBox[{"VertexList", "[", "graph", "]"}], ",", 
+    RowBox[{"Ordering", "[", 
+     RowBox[{
+      RowBox[{"func", "[", "graph", "]"}], ",", "All", ",", "Greater"}], 
+     "]"}]}], "]"}]}]}], "Code",
+ CellChangeTimes->{{3.840921437017665*^9, 3.840921465957746*^9}, {
+  3.840921549223041*^9, 3.840921568992447*^9}},
+ CellLabel->
+  "In[135]:=",ExpressionUUID->"1e075a4e-c6f0-40ae-a00e-ff7a4a527a8a"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"showImportance", "[", 
+  RowBox[{"g", ",", "PageRankCentrality"}], "]"}]], "Input",
+ CellChangeTimes->{{3.840918920845902*^9, 3.840918931239263*^9}},
+ CellLabel->
+  "In[113]:=",ExpressionUUID->"b736c7a9-caf2-4aed-ad4b-d44569d194dd"],
+
+Cell[BoxData[
+ GraphicsBox[
+  NamespaceBox["NetworkGraphics",
+   DynamicModuleBox[{Typeset`graph = HoldComplete[
+     Graph[{
+      "Research", "Academic authorship", "Academic freedom", 
+       "Academic journal", "Academic publishing", "Academic ranks", 
+       "Academia", "Academic dishonesty", "Academic ghostwriting", 
+       "14th Amendment to the U.S. Constitution", 
+       "2006 Duke University lacrosse case", "Abigail Thompson", 
+       "Abolitionism in the United States", "ABC-CLIO", "Abstract (summary)", 
+       "Academic", "APA style", "Academic conference", "Academic discipline", 
+       "Aalto University", "Academic degree", "Academic personnel", 
+       "Academic rank"}, {{{1, 2}, {1, 3}, {1, 4}, {1, 5}, {1, 6}, {2, 7}, {2,
+        8}, {2, 9}, {2, 4}, {2, 5}, {3, 10}, {3, 11}, {3, 12}, {3, 13}, {3, 
+       7}, {4, 14}, {4, 15}, {4, 7}, {4, 16}, {4, 2}, {5, 17}, {5, 15}, {5, 
+       2}, {5, 18}, {5, 19}, {6, 20}, {6, 7}, {6, 21}, {6, 22}, {6, 23}}, 
+       Null}, {GraphHighlight -> {
+        "APA style", "Aalto University", "Academic dishonesty", 
+         "Academic personnel", "Academic conference", "Academic ranks", 
+         "Research", "Academic", "Academic ghostwriting", 
+         "Academic authorship", "Academic publishing", 
+         "2006 Duke University lacrosse case", 
+         "14th Amendment to the U.S. Constitution", "Academic discipline", 
+         "Academic freedom", "ABC-CLIO", "Abstract (summary)", 
+         "Abolitionism in the United States", "Academia", "Abigail Thompson", 
+         "Academic degree", "Academic journal", "Academic rank"}, ImageSize -> 
+       Medium, VertexLabels -> {
+         Placed["Name", Tooltip]}, 
+       VertexSize -> {
+        "Academic rank" -> 0.21440924835000408`, "Academic journal" -> 
+         0.48818931949397437`, "2006 Duke University lacrosse case" -> 
+         0.21440924835000408`, "Academic" -> 0.2662479518096037, "ABC-CLIO" -> 
+         0.2662479518096037, "Abigail Thompson" -> 0.21440924835000408`, 
+         "Academic degree" -> 0.21440924835000408`, "Aalto University" -> 
+         0.21440924835000408`, "Abolitionism in the United States" -> 
+         0.21440924835000408`, "APA style" -> 0.2662479518096037, 
+         "Academic ranks" -> 0.18325576800358576`, "Academic freedom" -> 
+         0.18325576800358576`, "Academic dishonesty" -> 0.3049335514903884, 
+         "Academic authorship" -> 0.7157516716227926, "Abstract (summary)" -> 
+         0.532495903619207, "Academic discipline" -> 0.2662479518096037, 
+         "Academic conference" -> 0.2662479518096037, "Academia" -> 1., 
+         "Academic ghostwriting" -> 0.3049335514903884, "Research" -> 0., 
+         "Academic publishing" -> 0.48818931949397437`, 
+         "14th Amendment to the U.S. Constitution" -> 0.21440924835000408`, 
+         "Academic personnel" -> 0.21440924835000408`}}]]}, 
+    TagBox[GraphicsGroupBox[{
+       {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[0.02210897190952498], 
+        ArrowBox[{{2.2665374340823727`, 1.787561189784369}, {
+         3.0163043700579975`, 1.3521761079710553`}}, 0.040772406500965114`], 
+        ArrowBox[{{2.2665374340823727`, 1.787561189784369}, {
+         0.9449508034940208, 1.1290505111565672`}}, 0.040772406500965114`], 
+        ArrowBox[{{2.2665374340823727`, 1.787561189784369}, {
+         2.5947825963877564`, 0.9377102097673067}}, 0.040772406500965114`], 
+        ArrowBox[{{2.2665374340823727`, 1.787561189784369}, {
+         3.629095082222063, 2.073979983776757}}, 0.040772406500965114`], 
+        ArrowBox[{{2.2665374340823727`, 1.787561189784369}, {
+         1.5285765010409889`, 2.857051636337814}}, 0.040772406500965114`], 
+        ArrowBox[BezierCurveBox[{{3.0163043700579975`, 1.3521761079710553`}, {
+         2.8736985652054248`, 1.075627803452883}, {2.5947825963877564`, 
+         0.9377102097673067}}], 0.040772406500965114`], 
+        ArrowBox[BezierCurveBox[{{3.0163043700579975`, 1.3521761079710553`}, {
+         3.2040057574828653`, 1.8138458084490356`}, {3.629095082222063, 
+         2.073979983776757}}], 0.040772406500965114`], 
+        ArrowBox[{{3.0163043700579975`, 1.3521761079710553`}, {
+         1.8975975106464205`, 1.6338803221077507`}}, 0.040772406500965114`], 
+        ArrowBox[{{3.0163043700579975`, 1.3521761079710553`}, {
+         3.6493272138907917`, 0.5638219036536214}}, 0.040772406500965114`], 
+        ArrowBox[{{3.0163043700579975`, 1.3521761079710553`}, {
+         3.9514499350100962`, 1.015046254870838}}, 0.040772406500965114`], 
+        ArrowBox[{{0.9449508034940208, 1.1290505111565672`}, {
+         1.8975975106464205`, 1.6338803221077507`}}, 0.040772406500965114`], 
+        ArrowBox[{{0.9449508034940208, 1.1290505111565672`}, {0., 
+         0.9173359690834474}}, 0.040772406500965114`], 
+        ArrowBox[{{0.9449508034940208, 1.1290505111565672`}, {
+         0.22084823883545468`, 0.490135292125115}}, 0.040772406500965114`], 
+        ArrowBox[{{0.9449508034940208, 1.1290505111565672`}, {
+         0.07567504453904483, 1.401521291426458}}, 0.040772406500965114`], 
+        ArrowBox[{{0.9449508034940208, 1.1290505111565672`}, {
+         0.6362474291885267, 0.25646665215178954`}}, 0.040772406500965114`], 
+        ArrowBox[BezierCurveBox[{{2.5947825963877564`, 0.9377102097673067}, {
+         2.7373884012403225`, 1.2142585142854483`}, {3.0163043700579975`, 
+         1.3521761079710553`}}], 0.040772406500965114`], 
+        ArrowBox[{{2.5947825963877564`, 0.9377102097673067}, {
+         1.8975975106464205`, 1.6338803221077507`}}, 0.040772406500965114`], 
+        ArrowBox[{{2.5947825963877564`, 0.9377102097673067}, {
+         2.9043753867896487`, 0.}}, 0.040772406500965114`], 
+        ArrowBox[{{2.5947825963877564`, 0.9377102097673067}, {
+         3.4051406871140903`, 1.3997404999415584`}}, 0.040772406500965114`], 
+        ArrowBox[{{2.5947825963877564`, 0.9377102097673067}, {
+         2.359574167293106, 0.0680383096103574}}, 0.040772406500965114`], 
+        ArrowBox[BezierCurveBox[{{3.629095082222063, 2.073979983776757}, {
+         3.4413936947971737`, 1.6123102832987621`}, {3.0163043700579975`, 
+         1.3521761079710553`}}], 0.040772406500965114`], 
+        ArrowBox[{{3.629095082222063, 2.073979983776757}, {
+         3.4051406871140903`, 1.3997404999415584`}}, 0.040772406500965114`], 
+        ArrowBox[{{3.629095082222063, 2.073979983776757}, {4.484300255992822, 
+         2.5521106946741896`}}, 0.040772406500965114`], 
+        ArrowBox[{{3.629095082222063, 2.073979983776757}, {4.063897277713689, 
+         2.8920119854465085`}}, 0.040772406500965114`], 
+        ArrowBox[{{3.629095082222063, 2.073979983776757}, {4.610391503935056, 
+         2.0486004437760528`}}, 0.040772406500965114`], 
+        ArrowBox[{{1.5285765010409889`, 2.857051636337814}, {
+         1.8975975106464205`, 1.6338803221077507`}}, 0.040772406500965114`], 
+        ArrowBox[{{1.5285765010409889`, 2.857051636337814}, {
+         1.8312363710158812`, 3.710340995738628}}, 0.040772406500965114`], 
+        ArrowBox[{{1.5285765010409889`, 2.857051636337814}, {
+         0.9024285877331992, 3.5882199799457464`}}, 0.040772406500965114`], 
+        ArrowBox[{{1.5285765010409889`, 2.857051636337814}, {
+         1.3244201877534802`, 3.8118699474834816`}}, 0.040772406500965114`], 
+        ArrowBox[{{1.5285765010409889`, 2.857051636337814}, {
+         0.678408371637419, 3.156308386593653}}, 0.040772406500965114`]}, 
+       {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[0.7]}], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{2.2665374340823727, 1.787561189784369}, 0.]},
+          "\"Research\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Research", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{3.0163043700579975, 1.3521761079710553}, 
+            0.14019237297482354]},
+          "\"Academic authorship\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic authorship", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{0.9449508034940208, 1.1290505111565672}, 
+            0.035893819038519605]},
+          "\"Academic freedom\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic freedom", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{2.5947825963877564, 0.9377102097673067}, 
+            0.09562034134779253]},
+          "\"Academic journal\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic journal", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{3.629095082222063, 2.073979983776757}, 
+            0.09562034134779253]},
+          "\"Academic publishing\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic publishing", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{1.5285765010409889, 2.857051636337814}, 
+            0.035893819038519605]},
+          "\"Academic ranks\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic ranks", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{1.8975975106464205, 1.6338803221077507}, 
+            0.19586733574365459]},
+          "\"Academia\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academia", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{3.6493272138907917, 0.5638219036536214}, 
+            0.05972652230927289]},
+          "\"Academic dishonesty\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic dishonesty", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{3.9514499350100962, 1.015046254870838}, 
+            0.05972652230927289]},
+          "\"Academic ghostwriting\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic ghostwriting", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{0., 0.9173359690834474}, 0.041995768233114864]},
+          "\"14th Amendment to the U.S. Constitution\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "14th Amendment to the U.S. Constitution", 
+          "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{0.22084823883545468, 0.490135292125115}, 
+            0.041995768233114864]},
+          "\"2006 Duke University lacrosse case\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "2006 Duke University lacrosse case", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{0.07567504453904483, 1.401521291426458}, 
+            0.041995768233114864]},
+          "\"Abigail Thompson\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Abigail Thompson", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{0.6362474291885267, 0.25646665215178954}, 
+            0.041995768233114864]},
+          "\"Abolitionism in the United States\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Abolitionism in the United States", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{2.9043753867896487, 0.}, 0.05214927696815201]},
+          "\"ABC-CLIO\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "ABC-CLIO", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{3.4051406871140903, 1.3997404999415584}, 
+            0.10429855393630394]},
+          "\"Abstract (summary)\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Abstract (summary)", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{2.359574167293106, 0.0680383096103574}, 
+            0.05214927696815201]},
+          "\"Academic\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{4.484300255992822, 2.5521106946741896}, 
+            0.05214927696815201]},
+          "\"APA style\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "APA style", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{4.063897277713689, 2.8920119854465085}, 
+            0.05214927696815201]},
+          "\"Academic conference\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic conference", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{4.610391503935056, 2.0486004437760528}, 
+            0.05214927696815201]},
+          "\"Academic discipline\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic discipline", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{1.8312363710158812, 3.710340995738628}, 
+            0.041995768233114864]},
+          "\"Aalto University\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Aalto University", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{0.9024285877331992, 3.5882199799457464}, 
+            0.041995768233114864]},
+          "\"Academic degree\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic degree", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{1.3244201877534802, 3.8118699474834816}, 
+            0.041995768233114864]},
+          "\"Academic personnel\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic personnel", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{0.678408371637419, 3.156308386593653}, 
+            0.041995768233114864]},
+          "\"Academic rank\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic rank", "Tooltip"]& ]}}],
+     MouseAppearanceTag["NetworkGraphics"]],
+    AllowKernelInitialization->False]],
+  DefaultBaseStyle->{
+   "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> Hue[0.8, 1., 0.6]},
+  FormatType->TraditionalForm,
+  FrameTicks->None,
+  ImageSize->Medium]], "Output",
+ CellChangeTimes->{3.840918931579027*^9, 3.840919038698996*^9, 
+  3.840919258970421*^9},
+ CellLabel->
+  "Out[113]=",ExpressionUUID->"a5e3422c-d723-4940-a5c8-1b08c5314ba1"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"getOrder", "[", 
+  RowBox[{"g", ",", "PageRankCentrality"}], "]"}]], "Input",
+ CellChangeTimes->{{3.840918997328063*^9, 3.840919000160924*^9}},
+ CellLabel->
+  "In[114]:=",ExpressionUUID->"29a74bd9-3f6f-4287-9fc9-b08b8167a884"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"Academia\"\>", ",", "\<\"Academic authorship\"\>", 
+   ",", "\<\"Abstract (summary)\"\>", ",", "\<\"Academic publishing\"\>", 
+   ",", "\<\"Academic journal\"\>", ",", "\<\"Academic ghostwriting\"\>", 
+   ",", "\<\"Academic dishonesty\"\>", ",", "\<\"Academic discipline\"\>", 
+   ",", "\<\"Academic conference\"\>", ",", "\<\"APA style\"\>", 
+   ",", "\<\"Academic\"\>", ",", "\<\"ABC-CLIO\"\>", 
+   ",", "\<\"Academic rank\"\>", ",", "\<\"Academic personnel\"\>", 
+   ",", "\<\"Academic degree\"\>", ",", "\<\"Aalto University\"\>", 
+   ",", "\<\"Abolitionism in the United States\"\>", 
+   ",", "\<\"Abigail Thompson\"\>", 
+   ",", "\<\"2006 Duke University lacrosse case\"\>", 
+   ",", "\<\"14th Amendment to the U.S. Constitution\"\>", 
+   ",", "\<\"Academic ranks\"\>", ",", "\<\"Academic freedom\"\>", 
+   ",", "\<\"Research\"\>"}], "}"}]], "Output",
+ CellChangeTimes->{3.840919000492433*^9, 3.840919039347122*^9, 
+  3.840919259659432*^9},
+ CellLabel->
+  "Out[114]=",ExpressionUUID->"27a577e2-64e5-42ce-b256-8e98ae1d6671"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"showImportance", "[", 
+  RowBox[{"g", ",", "EigenvectorCentrality"}], "]"}]], "Input",
+ CellChangeTimes->{{3.840918935548888*^9, 3.840918943474465*^9}},
+ CellLabel->
+  "In[115]:=",ExpressionUUID->"22d3284f-389a-4324-8afd-cf9b71f2d118"],
+
+Cell[BoxData[
+ GraphicsBox[
+  NamespaceBox["NetworkGraphics",
+   DynamicModuleBox[{Typeset`graph = HoldComplete[
+     Graph[{
+      "Research", "Academic authorship", "Academic freedom", 
+       "Academic journal", "Academic publishing", "Academic ranks", 
+       "Academia", "Academic dishonesty", "Academic ghostwriting", 
+       "14th Amendment to the U.S. Constitution", 
+       "2006 Duke University lacrosse case", "Abigail Thompson", 
+       "Abolitionism in the United States", "ABC-CLIO", "Abstract (summary)", 
+       "Academic", "APA style", "Academic conference", "Academic discipline", 
+       "Aalto University", "Academic degree", "Academic personnel", 
+       "Academic rank"}, {{{1, 2}, {1, 3}, {1, 4}, {1, 5}, {1, 6}, {2, 7}, {2,
+        8}, {2, 9}, {2, 4}, {2, 5}, {3, 10}, {3, 11}, {3, 12}, {3, 13}, {3, 
+       7}, {4, 14}, {4, 15}, {4, 7}, {4, 16}, {4, 2}, {5, 17}, {5, 15}, {5, 
+       2}, {5, 18}, {5, 19}, {6, 20}, {6, 7}, {6, 21}, {6, 22}, {6, 23}}, 
+       Null}, {GraphHighlight -> {
+        "APA style", "Aalto University", "Academic dishonesty", 
+         "Academic personnel", "Academic conference", "Academic ranks", 
+         "Research", "Academic", "Academic ghostwriting", 
+         "Academic authorship", "Academic publishing", 
+         "2006 Duke University lacrosse case", 
+         "14th Amendment to the U.S. Constitution", "Academic discipline", 
+         "Academic freedom", "ABC-CLIO", "Abstract (summary)", 
+         "Abolitionism in the United States", "Academia", "Abigail Thompson", 
+         "Academic degree", "Academic journal", "Academic rank"}, ImageSize -> 
+       Medium, VertexLabels -> {
+         Placed["Name", Tooltip]}, 
+       VertexSize -> {
+        "Academic rank" -> 0., "Academic journal" -> 0.7071067811865477, 
+         "2006 Duke University lacrosse case" -> 0., "Academic" -> 0., 
+         "ABC-CLIO" -> 0., "Abigail Thompson" -> 0., "Academic degree" -> 0., 
+         "Aalto University" -> 0., "Abolitionism in the United States" -> 0., 
+         "APA style" -> 0., "Academic ranks" -> 0., "Academic freedom" -> 0., 
+         "Academic dishonesty" -> 0., "Academic authorship" -> 1., 
+         "Abstract (summary)" -> 0., "Academic discipline" -> 0., 
+         "Academic conference" -> 0., "Academia" -> 0., 
+         "Academic ghostwriting" -> 0., "Research" -> 0., 
+         "Academic publishing" -> 0.7071067811865475, 
+         "14th Amendment to the U.S. Constitution" -> 0., 
+         "Academic personnel" -> 0.}}]]}, 
+    TagBox[GraphicsGroupBox[{
+       {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[0.02210897190952498], 
+        ArrowBox[{{2.2665374340823727`, 1.787561189784369}, {
+         3.0163043700579975`, 1.3521761079710553`}}, 0.040772406500965114`], 
+        ArrowBox[{{2.2665374340823727`, 1.787561189784369}, {
+         0.9449508034940208, 1.1290505111565672`}}, 0.040772406500965114`], 
+        ArrowBox[{{2.2665374340823727`, 1.787561189784369}, {
+         2.5947825963877564`, 0.9377102097673067}}, 0.040772406500965114`], 
+        ArrowBox[{{2.2665374340823727`, 1.787561189784369}, {
+         3.629095082222063, 2.073979983776757}}, 0.040772406500965114`], 
+        ArrowBox[{{2.2665374340823727`, 1.787561189784369}, {
+         1.5285765010409889`, 2.857051636337814}}, 0.040772406500965114`], 
+        ArrowBox[BezierCurveBox[{{3.0163043700579975`, 1.3521761079710553`}, {
+         2.8736985652054248`, 1.075627803452883}, {2.5947825963877564`, 
+         0.9377102097673067}}], 0.040772406500965114`], 
+        ArrowBox[BezierCurveBox[{{3.0163043700579975`, 1.3521761079710553`}, {
+         3.2040057574828653`, 1.8138458084490356`}, {3.629095082222063, 
+         2.073979983776757}}], 0.040772406500965114`], 
+        ArrowBox[{{3.0163043700579975`, 1.3521761079710553`}, {
+         1.8975975106464205`, 1.6338803221077507`}}, 0.040772406500965114`], 
+        ArrowBox[{{3.0163043700579975`, 1.3521761079710553`}, {
+         3.6493272138907917`, 0.5638219036536214}}, 0.040772406500965114`], 
+        ArrowBox[{{3.0163043700579975`, 1.3521761079710553`}, {
+         3.9514499350100962`, 1.015046254870838}}, 0.040772406500965114`], 
+        ArrowBox[{{0.9449508034940208, 1.1290505111565672`}, {
+         1.8975975106464205`, 1.6338803221077507`}}, 0.040772406500965114`], 
+        ArrowBox[{{0.9449508034940208, 1.1290505111565672`}, {0., 
+         0.9173359690834474}}, 0.040772406500965114`], 
+        ArrowBox[{{0.9449508034940208, 1.1290505111565672`}, {
+         0.22084823883545468`, 0.490135292125115}}, 0.040772406500965114`], 
+        ArrowBox[{{0.9449508034940208, 1.1290505111565672`}, {
+         0.07567504453904483, 1.401521291426458}}, 0.040772406500965114`], 
+        ArrowBox[{{0.9449508034940208, 1.1290505111565672`}, {
+         0.6362474291885267, 0.25646665215178954`}}, 0.040772406500965114`], 
+        ArrowBox[BezierCurveBox[{{2.5947825963877564`, 0.9377102097673067}, {
+         2.7373884012403225`, 1.2142585142854483`}, {3.0163043700579975`, 
+         1.3521761079710553`}}], 0.040772406500965114`], 
+        ArrowBox[{{2.5947825963877564`, 0.9377102097673067}, {
+         1.8975975106464205`, 1.6338803221077507`}}, 0.040772406500965114`], 
+        ArrowBox[{{2.5947825963877564`, 0.9377102097673067}, {
+         2.9043753867896487`, 0.}}, 0.040772406500965114`], 
+        ArrowBox[{{2.5947825963877564`, 0.9377102097673067}, {
+         3.4051406871140903`, 1.3997404999415584`}}, 0.040772406500965114`], 
+        ArrowBox[{{2.5947825963877564`, 0.9377102097673067}, {
+         2.359574167293106, 0.0680383096103574}}, 0.040772406500965114`], 
+        ArrowBox[BezierCurveBox[{{3.629095082222063, 2.073979983776757}, {
+         3.4413936947971737`, 1.6123102832987621`}, {3.0163043700579975`, 
+         1.3521761079710553`}}], 0.040772406500965114`], 
+        ArrowBox[{{3.629095082222063, 2.073979983776757}, {
+         3.4051406871140903`, 1.3997404999415584`}}, 0.040772406500965114`], 
+        ArrowBox[{{3.629095082222063, 2.073979983776757}, {4.484300255992822, 
+         2.5521106946741896`}}, 0.040772406500965114`], 
+        ArrowBox[{{3.629095082222063, 2.073979983776757}, {4.063897277713689, 
+         2.8920119854465085`}}, 0.040772406500965114`], 
+        ArrowBox[{{3.629095082222063, 2.073979983776757}, {4.610391503935056, 
+         2.0486004437760528`}}, 0.040772406500965114`], 
+        ArrowBox[{{1.5285765010409889`, 2.857051636337814}, {
+         1.8975975106464205`, 1.6338803221077507`}}, 0.040772406500965114`], 
+        ArrowBox[{{1.5285765010409889`, 2.857051636337814}, {
+         1.8312363710158812`, 3.710340995738628}}, 0.040772406500965114`], 
+        ArrowBox[{{1.5285765010409889`, 2.857051636337814}, {
+         0.9024285877331992, 3.5882199799457464`}}, 0.040772406500965114`], 
+        ArrowBox[{{1.5285765010409889`, 2.857051636337814}, {
+         1.3244201877534802`, 3.8118699474834816`}}, 0.040772406500965114`], 
+        ArrowBox[{{1.5285765010409889`, 2.857051636337814}, {
+         0.678408371637419, 3.156308386593653}}, 0.040772406500965114`]}, 
+       {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[0.7]}], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{2.2665374340823727, 1.787561189784369}, 0.]},
+          "\"Research\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Research", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{3.0163043700579975, 1.3521761079710553}, 
+            0.19586733574365459]},
+          "\"Academic authorship\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic authorship", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{0.9449508034940208, 1.1290505111565672}, 0.]},
+          "\"Academic freedom\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic freedom", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{2.5947825963877564, 0.9377102097673067}, 
+            0.13849912131728043]},
+          "\"Academic journal\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic journal", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{3.629095082222063, 2.073979983776757}, 
+            0.1384991213172804]},
+          "\"Academic publishing\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic publishing", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{1.5285765010409889, 2.857051636337814}, 0.]},
+          "\"Academic ranks\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic ranks", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{1.8975975106464205, 1.6338803221077507}, 0.]},
+          "\"Academia\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academia", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{3.6493272138907917, 0.5638219036536214}, 0.]},
+          "\"Academic dishonesty\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic dishonesty", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{3.9514499350100962, 1.015046254870838}, 0.]},
+          "\"Academic ghostwriting\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic ghostwriting", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{0., 0.9173359690834474}, 0.]},
+          "\"14th Amendment to the U.S. Constitution\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "14th Amendment to the U.S. Constitution", 
+          "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{0.22084823883545468, 0.490135292125115}, 0.]},
+          "\"2006 Duke University lacrosse case\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "2006 Duke University lacrosse case", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{0.07567504453904483, 1.401521291426458}, 0.]},
+          "\"Abigail Thompson\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Abigail Thompson", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{0.6362474291885267, 0.25646665215178954}, 0.]},
+          "\"Abolitionism in the United States\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Abolitionism in the United States", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{2.9043753867896487, 0.}, 0.]},
+          "\"ABC-CLIO\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "ABC-CLIO", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{3.4051406871140903, 1.3997404999415584}, 0.]},
+          "\"Abstract (summary)\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Abstract (summary)", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{2.359574167293106, 0.0680383096103574}, 0.]},
+          "\"Academic\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{4.484300255992822, 2.5521106946741896}, 0.]},
+          "\"APA style\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "APA style", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{4.063897277713689, 2.8920119854465085}, 0.]},
+          "\"Academic conference\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic conference", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{4.610391503935056, 2.0486004437760528}, 0.]},
+          "\"Academic discipline\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic discipline", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{1.8312363710158812, 3.710340995738628}, 0.]},
+          "\"Aalto University\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Aalto University", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{0.9024285877331992, 3.5882199799457464}, 0.]},
+          "\"Academic degree\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic degree", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{1.3244201877534802, 3.8118699474834816}, 0.]},
+          "\"Academic personnel\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic personnel", "Tooltip"]& ], 
+        TagBox[
+         TooltipBox[
+          {Hue[1, 1, 0.7], EdgeForm[{Hue[1, 1, 0.7], Opacity[1]}], 
+           DiskBox[{0.678408371637419, 3.156308386593653}, 0.]},
+          "\"Academic rank\"",
+          TooltipStyle->"TextStyling"],
+         Annotation[#, "Academic rank", "Tooltip"]& ]}}],
+     MouseAppearanceTag["NetworkGraphics"]],
+    AllowKernelInitialization->False]],
+  DefaultBaseStyle->{
+   "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> Hue[0.8, 1., 0.6]},
+  FormatType->TraditionalForm,
+  FrameTicks->None,
+  ImageSize->Medium]], "Output",
+ CellChangeTimes->{3.8409189438327227`*^9, 3.840919040027801*^9, 
+  3.840919260125593*^9},
+ CellLabel->
+  "Out[115]=",ExpressionUUID->"8567b6ef-4c51-44ec-9157-8d366604380e"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"getOrder", "[", 
+  RowBox[{"g", ",", "EigenvectorCentrality"}], "]"}]], "Input",
+ CellChangeTimes->{{3.840919003023892*^9, 3.8409190072440434`*^9}},
+ CellLabel->
+  "In[116]:=",ExpressionUUID->"ab9fb0fd-2b84-4d26-afbe-ea040d869111"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"Academic authorship\"\>", ",", "\<\"Academic publishing\"\>", 
+   ",", "\<\"Academic journal\"\>", ",", "\<\"Academic rank\"\>", 
+   ",", "\<\"Academic personnel\"\>", ",", "\<\"Academic degree\"\>", 
+   ",", "\<\"Aalto University\"\>", ",", "\<\"Academic discipline\"\>", 
+   ",", "\<\"Academic conference\"\>", ",", "\<\"APA style\"\>", 
+   ",", "\<\"Academic\"\>", ",", "\<\"Abstract (summary)\"\>", 
+   ",", "\<\"ABC-CLIO\"\>", ",", "\<\"Abolitionism in the United States\"\>", 
+   ",", "\<\"Abigail Thompson\"\>", 
+   ",", "\<\"2006 Duke University lacrosse case\"\>", 
+   ",", "\<\"14th Amendment to the U.S. Constitution\"\>", 
+   ",", "\<\"Academic ghostwriting\"\>", ",", "\<\"Academic dishonesty\"\>", 
+   ",", "\<\"Academia\"\>", ",", "\<\"Academic ranks\"\>", 
+   ",", "\<\"Academic freedom\"\>", ",", "\<\"Research\"\>"}], 
+  "}"}]], "Output",
+ CellChangeTimes->{3.840919007563636*^9, 3.840919040680442*^9, 
+  3.840919261144845*^9},
+ CellLabel->
+  "Out[116]=",ExpressionUUID->"5f4a8e0e-f93f-4544-abf0-9b6a396c85d5"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{960, 1003},
+WindowMargins->{{Automatic, 0}, {Automatic, 37}},
+FrontEndVersion->"12.3 for Linux x86 (64-bit) (July 9, 2021)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"6c331bdd-ed49-4b8e-bfe6-e119d37c8e55"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 165, 3, 98, "Title",ExpressionUUID->"50227914-6595-4f7b-b9ea-2329da5a79fd"],
+Cell[CellGroupData[{
+Cell[770, 29, 156, 3, 67, "Section",ExpressionUUID->"502dbaf6-c4ed-4b1f-91f9-27e533b1aa34"],
+Cell[929, 34, 753, 12, 104, "Text",ExpressionUUID->"c61fd206-add9-4d92-85da-b2202eeecb39"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1719, 51, 151, 3, 67, "Section",ExpressionUUID->"506122de-c25d-4eda-b194-66f4126bdcc3"],
+Cell[1873, 56, 160, 3, 32, "Item",ExpressionUUID->"27d2cdf2-d56b-4d03-85de-3dde8ae4d599"],
+Cell[2036, 61, 234, 4, 32, "Item",ExpressionUUID->"91b98f3a-40a1-41de-995f-ff95ceeb74e3"],
+Cell[2273, 67, 254, 4, 32, "Item",ExpressionUUID->"90893445-b16d-48c0-bbfb-807de4a0d5d8"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2564, 76, 200, 4, 67, "Section",ExpressionUUID->"6a64aeb0-3876-49ad-90e4-76e5967c4c54"],
+Cell[2767, 82, 185, 3, 32, "Item",ExpressionUUID->"11a461e1-7b7f-4ff8-b888-2637bba677b1"],
+Cell[2955, 87, 158, 3, 32, "Item",ExpressionUUID->"80135f85-645d-48c4-b651-8f4c999c721c"],
+Cell[CellGroupData[{
+Cell[3138, 94, 257, 4, 32, "Item",ExpressionUUID->"7b6e5ab1-7418-4b72-b27c-f8d4f513595e"],
+Cell[3398, 100, 254, 4, 26, "Subitem",ExpressionUUID->"6f54ee52-cb2c-4da8-97dd-d37cbcdbf846"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3701, 110, 197, 4, 67, "Section",ExpressionUUID->"80f7338f-6de6-4de1-b355-90befac27125"],
+Cell[3901, 116, 214, 5, 32, "Item",ExpressionUUID->"4ef2b152-5eb0-4d85-b6b3-f2bb796e579a"],
+Cell[4118, 123, 239, 6, 32, "Item",ExpressionUUID->"d91f7f0e-913c-42db-ab04-02b57d298db9"],
+Cell[4360, 131, 234, 4, 32, "Item",ExpressionUUID->"c5651ad9-95b2-4b68-b47a-14180a8a8c2c"],
+Cell[CellGroupData[{
+Cell[4619, 139, 208, 4, 32, "Item",ExpressionUUID->"704a5bc9-9a99-4065-920c-49dfc2391089"],
+Cell[4830, 145, 216, 4, 26, "Subitem",ExpressionUUID->"c504482f-4466-47c0-b6de-d2dd3f18143d"],
+Cell[5049, 151, 296, 4, 26, "Subitem",ExpressionUUID->"aaa47c16-6cca-4754-9323-6cd279572de0"]
+}, Open  ]],
+Cell[5360, 158, 333, 7, 32, "Item",ExpressionUUID->"3de84635-0d06-425e-a3e8-4476e2d6fbcd"],
+Cell[5696, 167, 298, 4, 32, "Item",ExpressionUUID->"45a85434-e231-4a79-98dd-8003235742c5"],
+Cell[5997, 173, 227, 4, 32, "Item",ExpressionUUID->"a38b2436-018a-4b56-ba34-0dc404227cc7"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6261, 182, 154, 3, 67, "Section",ExpressionUUID->"932c340b-8633-4138-b695-13ada479af7a"],
+Cell[CellGroupData[{
+Cell[6440, 189, 340, 7, 30, "Input",ExpressionUUID->"83c16ce2-fbe1-4f5b-bb47-840771682a52"],
+Cell[6783, 198, 456, 8, 79, "Output",ExpressionUUID->"af5dd6f2-3822-4df2-a987-d17a09305e6a"]
+}, Open  ]],
+Cell[7254, 209, 642, 12, 30, "Input",ExpressionUUID->"04ca4b83-76dd-434c-9b84-5c27d313b7b6"],
+Cell[CellGroupData[{
+Cell[7921, 225, 471, 10, 30, "Input",ExpressionUUID->"eb2fc544-2b27-44ce-a2dd-b5451fdeb731"],
+Cell[8395, 237, 12287, 255, 237, "Output",ExpressionUUID->"fc83b63d-0180-414f-ba2b-7e8a7cb72f58"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[20719, 497, 316, 5, 30, "Input",ExpressionUUID->"4e92d1e1-ddd3-466f-8c46-537619af3737"],
+Cell[21038, 504, 13943, 295, 288, "Output",ExpressionUUID->"f4980910-5306-46cc-a449-8d3e9107d9ce"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[35018, 804, 223, 4, 30, "Input",ExpressionUUID->"2e4c3243-377e-4c7b-8e18-38d9a620ff14"],
+Cell[35244, 810, 7658, 182, 136, "Output",ExpressionUUID->"74a39498-4ade-4e0a-8c09-5e64035873ed"]
+}, Open  ]],
+Cell[42917, 995, 1984, 52, 185, "Input",ExpressionUUID->"40834445-e63e-4041-b622-217761f3b6ea"],
+Cell[44904, 1049, 1654, 42, 153, "Code",ExpressionUUID->"1e075a4e-c6f0-40ae-a00e-ff7a4a527a8a"],
+Cell[CellGroupData[{
+Cell[46583, 1095, 256, 5, 30, "Input",ExpressionUUID->"b736c7a9-caf2-4aed-ad4b-d44569d194dd"],
+Cell[46842, 1102, 15598, 305, 318, "Output",ExpressionUUID->"a5e3422c-d723-4940-a5c8-1b08c5314ba1"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[62477, 1412, 250, 5, 30, "Input",ExpressionUUID->"29a74bd9-3f6f-4287-9fc9-b08b8167a884"],
+Cell[62730, 1419, 1073, 19, 123, "Output",ExpressionUUID->"27a577e2-64e5-42ce-b256-8e98ae1d6671"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[63840, 1443, 259, 5, 30, "Input",ExpressionUUID->"22d3284f-389a-4324-8afd-cf9b71f2d118"],
+Cell[64102, 1450, 14678, 284, 317, "Output",ExpressionUUID->"8567b6ef-4c51-44ec-9157-8d366604380e"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[78817, 1739, 255, 5, 30, "Input",ExpressionUUID->"ab9fb0fd-2b84-4d26-afbe-ea040d869111"],
+Cell[79075, 1746, 1072, 19, 123, "Output",ExpressionUUID->"5f4a8e0e-f93f-4544-abf0-9b6a396c85d5"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
