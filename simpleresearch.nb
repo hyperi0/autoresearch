@@ -10,48 +10,14 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[      7800,        217]
-NotebookOptionsPosition[      6655,        191]
-NotebookOutlinePosition[      7044,        207]
-CellTagsIndexPosition[      7001,        204]
+NotebookDataLength[     10435,        274]
+NotebookOptionsPosition[      9717,        256]
+NotebookOutlinePosition[     10106,        272]
+CellTagsIndexPosition[     10063,        269]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
-
-Cell[CellGroupData[{
-Cell["Simplified Automatic Research", "Section",
- CellChangeTimes->{{3.8410016153672132`*^9, 
-  3.841001619331337*^9}},ExpressionUUID->"1179566a-9e0c-4684-b63d-\
-e12f76638b58"],
-
-Cell["Take summary of Wikipedia article", "Item",
- CellChangeTimes->{{3.841001621060862*^9, 
-  3.841001641337229*^9}},ExpressionUUID->"c8a86804-6457-4213-87de-\
-a3c110e73444"],
-
-Cell["Find most relevant links based on PageRankCentrality", "Item",
- CellChangeTimes->{{3.841001621060862*^9, 
-  3.841001649795904*^9}},ExpressionUUID->"b6809e6b-50c3-4015-bd35-\
-bfa7aa1e9880"],
-
-Cell["Add in summaries of relevant links to original summary", "Item",
- CellChangeTimes->{{3.841001621060862*^9, 
-  3.841001665379636*^9}},ExpressionUUID->"d7e3ca7e-3e25-4728-9ae5-\
-69c2aeba13e7"],
-
-Cell[CellGroupData[{
-
-Cell["Continue recursively", "Item",
- CellChangeTimes->{{3.841001621060862*^9, 
-  3.841001668264709*^9}},ExpressionUUID->"0db4d0ed-727f-4ce9-a8a0-\
-ea7b7d275894"],
-
-Cell[BoxData[""], "Input",
- CellChangeTimes->{{3.841007516413703*^9, 
-  3.841007552752554*^9}},ExpressionUUID->"d601b124-7191-4c9d-b59a-\
-7a737a272719"],
-
 Cell[BoxData[
  RowBox[{
   RowBox[{"(*", " ", 
@@ -111,8 +77,9 @@ Cell[BoxData[
      "]"}]}]}]}]], "Code",
  CellChangeTimes->{{3.841003247235236*^9, 3.8410032521205893`*^9}, {
   3.8410034038428087`*^9, 3.8410034047645693`*^9}, {3.84100537695394*^9, 
-  3.8410053773180017`*^9}, {3.84100754977057*^9, 
-  3.841007596412169*^9}},ExpressionUUID->"0d1f1ec7-8fb4-442c-8f29-\
+  3.8410053773180017`*^9}, {3.84100754977057*^9, 3.841007596412169*^9}, {
+  3.841007992651895*^9, 
+  3.841007994379648*^9}},ExpressionUUID->"0d1f1ec7-8fb4-442c-8f29-\
 cd0c0adad387"],
 
 Cell[BoxData[
@@ -151,8 +118,70 @@ Cell[BoxData[
         "]"}]}], "]"}], "//", "Flatten"}]}]}]}]], "Code",
  CellChangeTimes->{{3.841005661887444*^9, 3.841005683183223*^9}, {
   3.841005950231049*^9, 3.841005950278926*^9}, {3.841007603151661*^9, 
-  3.841007623734537*^9}},ExpressionUUID->"211e54cf-b093-4d86-b964-\
+  3.841007623734537*^9}, {3.841007829761836*^9, 
+  3.841007841325108*^9}},ExpressionUUID->"211e54cf-b093-4d86-b964-\
 48879e24c82e"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "find", " ", "top", " ", "links", " ", "based", " ", "on", " ", "PageRank",
+     " ", "algorithm"}], " ", "*)"}], "\n", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"getLinkOrder", "[", "linkRules_", "]"}], ":=", 
+    RowBox[{"With", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"graph", "=", 
+        RowBox[{"Graph", "[", "linkRules", "]"}]}], "}"}], ",", "\n", "\t", 
+      RowBox[{"Part", "[", 
+       RowBox[{
+        RowBox[{"VertexList", "[", "graph", "]"}], ",", 
+        RowBox[{"Ordering", "[", 
+         RowBox[{
+          RowBox[{"PageRankCentrality", "[", "graph", "]"}], ",", "All", ",", 
+          "Greater"}], "]"}]}], "]"}]}], "]"}]}], "\n", 
+   RowBox[{
+    RowBox[{"getTopLinks", "[", 
+     RowBox[{"linkRules_", ",", 
+      RowBox[{"n_", ":", "50"}]}], "]"}], ":=", 
+    RowBox[{
+     RowBox[{"getLinkOrder", "[", "linkRules", "]"}], "[", 
+     RowBox[{"[", 
+      RowBox[{";;", 
+       RowBox[{"UpTo", "[", "n", "]"}]}], "]"}], "]"}]}], "\n", 
+   RowBox[{
+    RowBox[{"getTopLinkRules", "[", 
+     RowBox[{"linkRules_", ",", 
+      RowBox[{"n_", ":", "50"}]}], "]"}], ":=", 
+    RowBox[{"With", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"topLinks", "=", 
+        RowBox[{"getTopLinks", "[", 
+         RowBox[{"linkRules", ",", "n"}], "]"}]}], "}"}], ",", "\n", "\t", 
+      RowBox[{"Select", "[", 
+       RowBox[{"linkRules", ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"MemberQ", "[", 
+           RowBox[{"topLinks", ",", 
+            RowBox[{"Values", "[", "#", "]"}]}], "]"}], "&&", 
+          RowBox[{"MemberQ", "[", 
+           RowBox[{"topLinks", ",", 
+            RowBox[{"Keys", "[", "#", "]"}]}], "]"}]}], "&"}]}], "]"}]}], 
+     "]"}]}]}]}]], "Code",
+ CellChangeTimes->{{3.841007693998407*^9, 3.8410077096156588`*^9}, {
+  3.841007755475154*^9, 3.841007764056892*^9}, {3.841007844043118*^9, 
+  3.841007883895359*^9}, {3.841008122664392*^9, 3.8410081274020767`*^9}, {
+  3.8410085661937943`*^9, 3.841008568662086*^9}, {3.8410087160868883`*^9, 
+  3.8410088889265337`*^9}, {3.841008947029641*^9, 3.841008954259107*^9}, {
+  3.84100898633463*^9, 3.84100898943994*^9}, {3.841009029245742*^9, 
+  3.8410090348655376`*^9}, {3.841009150768434*^9, 3.841009155531062*^9}},
+ CellLabel->
+  "In[149]:=",ExpressionUUID->"4a8b3d82-d214-42db-9b4b-ca0e4fc5484c"],
 
 Cell[BoxData[
  RowBox[{
@@ -160,34 +189,70 @@ Cell[BoxData[
    RowBox[{"show", " ", "link", " ", "hierarchy"}], " ", "*)"}], "\n", 
   RowBox[{
    RowBox[{
-    RowBox[{"getLinksGraph", "[", "linkRules_", "]"}], ":=", 
+    RowBox[{"getLabeledLinksGraph", "[", "linkRules_", "]"}], ":=", 
     RowBox[{"Graph", "[", 
      RowBox[{"linkRules", ",", 
       RowBox[{"VertexLabels", "->", 
        RowBox[{"Placed", "[", 
         RowBox[{"\"\<Name\>\"", ",", "Tooltip"}], "]"}]}]}], "]"}]}], "\n", 
    RowBox[{
+    RowBox[{"showPageRankGraph", "[", "linkRules_", "]"}], ":=", 
+    RowBox[{"With", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"graph", "=", 
+        RowBox[{"getLabeledLinksGraph", "[", "linkRules", "]"}]}], "}"}], ",",
+       "\n", "\t", 
+      RowBox[{"CommunityGraphPlot", "[", 
+       RowBox[{
+        RowBox[{"HighlightGraph", "[", 
+         RowBox[{"graph", ",", " ", 
+          RowBox[{"VertexList", "@", "graph"}], ",", "\n", " \t", 
+          RowBox[{"VertexSize", " ", "->", " ", 
+           RowBox[{"Thread", "[", 
+            RowBox[{
+             RowBox[{"VertexList", "@", "graph"}], " ", "->", " ", 
+             RowBox[{
+              RowBox[{"Rescale", "[", 
+               RowBox[{"PageRankCentrality", "@", "graph"}], "]"}], "+", 
+              ".1"}]}], "]"}]}]}], "]"}], ",", 
+        RowBox[{"ImageSize", "->", "Large"}]}], "]"}]}], "]"}]}], "\n", 
+   RowBox[{
+    RowBox[{"getArticleGraph", "[", "article_", "]"}], ":=", 
     RowBox[{"showPageRankGraph", "[", 
-     RowBox[{"graph_", ",", 
-      RowBox[{"scale_", ":", "3"}]}], "]"}], ":=", 
-    RowBox[{"HighlightGraph", "[", 
-     RowBox[{"graph", ",", " ", 
-      RowBox[{"VertexList", "@", "graph"}], ",", "\n", " \t", 
-      RowBox[{"VertexSize", " ", "->", " ", 
-       RowBox[{"Thread", "[", 
-        RowBox[{
-         RowBox[{"VertexList", "@", "graph"}], " ", "->", " ", 
-         RowBox[{
-          RowBox[{"Rescale", "[", 
-           RowBox[{"PageRankCentrality", "@", "graph"}], "]"}], "*", 
-          "scale"}]}], "]"}]}], ",", " ", 
-      RowBox[{"ImageSize", " ", "->", " ", "Large"}]}], "]"}]}]}]}]], "Code",
+     RowBox[{"getTopLinkRules", "[", 
+      RowBox[{"getLinkRules", "[", 
+       RowBox[{"article", ",", "2"}], "]"}], "]"}], "]"}]}]}]}]], "Code",
  CellChangeTimes->{{3.841007376722374*^9, 3.8410073879545507`*^9}, {
-  3.84100749379911*^9, 
-  3.841007507624425*^9}},ExpressionUUID->"50537ff6-7fbd-4b93-b3bc-\
-6e153f8edf93"]
-}, Open  ]]
-}, Open  ]]
+   3.84100749379911*^9, 3.841007507624425*^9}, {3.841007810391057*^9, 
+   3.8410078111531477`*^9}, {3.841008310280702*^9, 3.8410083265120287`*^9}, {
+   3.841008536926805*^9, 3.841008545963367*^9}, {3.841008586138462*^9, 
+   3.8410086043816233`*^9}, {3.841008660845902*^9, 3.8410086876300583`*^9}, 
+   3.8410089295645*^9, {3.841009011117103*^9, 3.841009012424724*^9}, {
+   3.841009081500531*^9, 3.841009091736094*^9}, {3.841009190450137*^9, 
+   3.841009199343772*^9}},
+ CellLabel->
+  "In[155]:=",ExpressionUUID->"50537ff6-7fbd-4b93-b3bc-6e153f8edf93"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"get", " ", "article", " ", "summaries"}], " ", "*)"}], "\n", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"getSingleSummary", "[", "article_", "]"}], ":=", 
+    RowBox[{"WikipediaData", "[", 
+     RowBox[{"article", ",", "\"\<SummaryPlaintext\>\""}], "]"}]}], "\n", 
+   RowBox[{
+    RowBox[{"getDeepSummary", "[", 
+     RowBox[{"article_", ",", "maxDepth_", ",", "length_"}], "]"}], ":=", 
+    "Nothing"}]}]}]], "Code",
+ CellChangeTimes->{{3.841007971424787*^9, 3.8410080325294247`*^9}, 
+   3.84100813992599*^9, {3.841008422052722*^9, 3.841008436997664*^9}, {
+   3.841008488517989*^9, 3.841008489529668*^9}, {3.841008612126511*^9, 
+   3.8410086181425533`*^9}},
+ CellLabel->
+  "In[152]:=",ExpressionUUID->"f46bb65d-50d5-408b-a8cb-0381320b1688"]
 },
 WindowSize->{960, 1003},
 WindowMargins->{{Automatic, 0}, {Automatic, 37}},
@@ -206,19 +271,11 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[CellGroupData[{
-Cell[580, 22, 176, 3, 67, "Section",ExpressionUUID->"1179566a-9e0c-4684-b63d-e12f76638b58"],
-Cell[759, 27, 175, 3, 32, "Item",ExpressionUUID->"c8a86804-6457-4213-87de-a3c110e73444"],
-Cell[937, 32, 194, 3, 32, "Item",ExpressionUUID->"b6809e6b-50c3-4015-bd35-bfa7aa1e9880"],
-Cell[1134, 37, 196, 3, 32, "Item",ExpressionUUID->"d7e3ca7e-3e25-4728-9ae5-69c2aeba13e7"],
-Cell[CellGroupData[{
-Cell[1355, 44, 162, 3, 32, "Item",ExpressionUUID->"0db4d0ed-727f-4ce9-a8a0-ea7b7d275894"],
-Cell[1520, 49, 152, 3, 30, "Input",ExpressionUUID->"d601b124-7191-4c9d-b59a-7a737a272719"],
-Cell[1675, 54, 2353, 61, 213, "Code",ExpressionUUID->"0d1f1ec7-8fb4-442c-8f29-cd0c0adad387"],
-Cell[4031, 117, 1346, 37, 113, "Code",ExpressionUUID->"211e54cf-b093-4d86-b964-48879e24c82e"],
-Cell[5380, 156, 1247, 31, 113, "Code",ExpressionUUID->"50537ff6-7fbd-4b93-b3bc-6e153f8edf93"]
-}, Open  ]]
-}, Open  ]]
+Cell[558, 20, 2402, 62, 213, "Code",ExpressionUUID->"0d1f1ec7-8fb4-442c-8f29-cd0c0adad387"],
+Cell[2963, 84, 1395, 38, 113, "Code",ExpressionUUID->"211e54cf-b093-4d86-b964-48879e24c82e"],
+Cell[4361, 124, 2362, 59, 153, "Code",ExpressionUUID->"4a8b3d82-d214-42db-9b4b-ca0e4fc5484c"],
+Cell[6726, 185, 2192, 49, 153, "Code",ExpressionUUID->"50537ff6-7fbd-4b93-b3bc-6e153f8edf93"],
+Cell[8921, 236, 792, 18, 93, "Code",ExpressionUUID->"f46bb65d-50d5-408b-a8cb-0381320b1688"]
 }
 ]
 *)
