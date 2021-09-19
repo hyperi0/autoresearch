@@ -1,0 +1,225 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      7800,        217]
+NotebookOptionsPosition[      6655,        191]
+NotebookOutlinePosition[      7044,        207]
+CellTagsIndexPosition[      7001,        204]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Simplified Automatic Research", "Section",
+ CellChangeTimes->{{3.8410016153672132`*^9, 
+  3.841001619331337*^9}},ExpressionUUID->"1179566a-9e0c-4684-b63d-\
+e12f76638b58"],
+
+Cell["Take summary of Wikipedia article", "Item",
+ CellChangeTimes->{{3.841001621060862*^9, 
+  3.841001641337229*^9}},ExpressionUUID->"c8a86804-6457-4213-87de-\
+a3c110e73444"],
+
+Cell["Find most relevant links based on PageRankCentrality", "Item",
+ CellChangeTimes->{{3.841001621060862*^9, 
+  3.841001649795904*^9}},ExpressionUUID->"b6809e6b-50c3-4015-bd35-\
+bfa7aa1e9880"],
+
+Cell["Add in summaries of relevant links to original summary", "Item",
+ CellChangeTimes->{{3.841001621060862*^9, 
+  3.841001665379636*^9}},ExpressionUUID->"d7e3ca7e-3e25-4728-9ae5-\
+69c2aeba13e7"],
+
+Cell[CellGroupData[{
+
+Cell["Continue recursively", "Item",
+ CellChangeTimes->{{3.841001621060862*^9, 
+  3.841001668264709*^9}},ExpressionUUID->"0db4d0ed-727f-4ce9-a8a0-\
+ea7b7d275894"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.841007516413703*^9, 
+  3.841007552752554*^9}},ExpressionUUID->"d601b124-7191-4c9d-b59a-\
+7a737a272719"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "get", " ", "links", " ", "from", " ", "wikipedia", " ", "article", " ", 
+    "summary"}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"splitLinkCode", "[", "linkCode_String", "]"}], ":=", 
+    RowBox[{"StringSplit", "[", 
+     RowBox[{"linkCode", ",", 
+      RowBox[{"{", 
+       RowBox[{"\"\<[[\>\"", ",", "\"\<|\>\"", ",", "\"\<]]\>\""}], "}"}]}], 
+     "]"}]}], "\n", 
+   RowBox[{
+    RowBox[{"getLinkWithText", "[", "linkCode_String", "]"}], ":=", 
+    RowBox[{"With", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"linkList", "=", 
+        RowBox[{"splitLinkCode", "[", "linkCode", "]"}]}], "}"}], ",", 
+      "\[IndentingNewLine]", "\t", 
+      RowBox[{
+       RowBox[{"Last", "[", "linkList", "]"}], "->", 
+       RowBox[{"First", "[", 
+        RowBox[{"WikipediaSearch", "[", 
+         RowBox[{"First", "@", "linkList"}], "]"}], "]"}]}]}], "]"}]}], "\n", 
+   
+   RowBox[{
+    RowBox[{"getSummaryCodeLinks", "[", "summaryCode_String", "]"}], ":=", 
+    "\n", "\t", 
+    RowBox[{"Select", "[", 
+     RowBox[{
+      RowBox[{"StringCases", "[", 
+       RowBox[{"summaryCode", ",", " ", 
+        RowBox[{"Shortest", "[", 
+         RowBox[{"\"\<[[\>\"", "~~", "__", "~~", "\"\<]]\>\""}], "]"}]}], 
+       "]"}], ",", " ", 
+      RowBox[{
+       RowBox[{"!", 
+        RowBox[{"StringContainsQ", "[", 
+         RowBox[{"#", ",", "\"\<:\>\""}], "]"}]}], "&"}]}], "]"}]}], "\n", 
+   RowBox[{
+    RowBox[{"getLinksFromSummaryCode", "[", "summaryCode_String", "]"}], ":=",
+     "\n", "\t", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Capitalize", "[", 
+       RowBox[{"First", "[", 
+        RowBox[{"splitLinkCode", "[", "#", "]"}], "]"}], "]"}], "&"}], "/@", 
+     RowBox[{"getSummaryCodeLinks", "[", "summaryCode", "]"}]}]}], "\n", 
+   RowBox[{
+    RowBox[{"getSummaryLinks", "[", "article_", "]"}], ":=", 
+    RowBox[{"getLinksFromSummaryCode", "[", 
+     RowBox[{"WikipediaData", "[", 
+      RowBox[{"article", ",", "\"\<SummaryWikicode\>\""}], "]"}], 
+     "]"}]}]}]}]], "Code",
+ CellChangeTimes->{{3.841003247235236*^9, 3.8410032521205893`*^9}, {
+  3.8410034038428087`*^9, 3.8410034047645693`*^9}, {3.84100537695394*^9, 
+  3.8410053773180017`*^9}, {3.84100754977057*^9, 
+  3.841007596412169*^9}},ExpressionUUID->"0d1f1ec7-8fb4-442c-8f29-\
+cd0c0adad387"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"recursively", " ", "gather", " ", "summary", " ", "links"}], " ", 
+   "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"getLinkRules", "[", 
+     RowBox[{"article_", ",", "1"}], "]"}], ":=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"article", "->", "#"}], "&"}], "/@", 
+     RowBox[{"getSummaryLinks", "[", "article", "]"}]}]}], "\n", 
+   RowBox[{
+    RowBox[{"getLinkRules", "[", 
+     RowBox[{"article_", ",", "n_"}], "]"}], ":=", 
+    RowBox[{
+     RowBox[{"With", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"links", "=", 
+         RowBox[{"getSummaryLinks", "[", "article", "]"}]}], "}"}], ",", 
+       "\[IndentingNewLine]", "\t", 
+       RowBox[{"Join", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{
+           RowBox[{"article", "->", "#"}], "&"}], "/@", "links"}], ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"getLinkRules", "[", 
+            RowBox[{"#", ",", 
+             RowBox[{"n", "-", "1"}]}], "]"}], "&"}], "/@", "links"}]}], 
+        "]"}]}], "]"}], "//", "Flatten"}]}]}]}]], "Code",
+ CellChangeTimes->{{3.841005661887444*^9, 3.841005683183223*^9}, {
+  3.841005950231049*^9, 3.841005950278926*^9}, {3.841007603151661*^9, 
+  3.841007623734537*^9}},ExpressionUUID->"211e54cf-b093-4d86-b964-\
+48879e24c82e"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"show", " ", "link", " ", "hierarchy"}], " ", "*)"}], "\n", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"getLinksGraph", "[", "linkRules_", "]"}], ":=", 
+    RowBox[{"Graph", "[", 
+     RowBox[{"linkRules", ",", 
+      RowBox[{"VertexLabels", "->", 
+       RowBox[{"Placed", "[", 
+        RowBox[{"\"\<Name\>\"", ",", "Tooltip"}], "]"}]}]}], "]"}]}], "\n", 
+   RowBox[{
+    RowBox[{"showPageRankGraph", "[", 
+     RowBox[{"graph_", ",", 
+      RowBox[{"scale_", ":", "3"}]}], "]"}], ":=", 
+    RowBox[{"HighlightGraph", "[", 
+     RowBox[{"graph", ",", " ", 
+      RowBox[{"VertexList", "@", "graph"}], ",", "\n", " \t", 
+      RowBox[{"VertexSize", " ", "->", " ", 
+       RowBox[{"Thread", "[", 
+        RowBox[{
+         RowBox[{"VertexList", "@", "graph"}], " ", "->", " ", 
+         RowBox[{
+          RowBox[{"Rescale", "[", 
+           RowBox[{"PageRankCentrality", "@", "graph"}], "]"}], "*", 
+          "scale"}]}], "]"}]}], ",", " ", 
+      RowBox[{"ImageSize", " ", "->", " ", "Large"}]}], "]"}]}]}]}]], "Code",
+ CellChangeTimes->{{3.841007376722374*^9, 3.8410073879545507`*^9}, {
+  3.84100749379911*^9, 
+  3.841007507624425*^9}},ExpressionUUID->"50537ff6-7fbd-4b93-b3bc-\
+6e153f8edf93"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{960, 1003},
+WindowMargins->{{Automatic, 0}, {Automatic, 37}},
+FrontEndVersion->"12.3 for Linux x86 (64-bit) (July 9, 2021)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"060dde87-0721-4fa9-b5c7-22725f16c302"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 176, 3, 67, "Section",ExpressionUUID->"1179566a-9e0c-4684-b63d-e12f76638b58"],
+Cell[759, 27, 175, 3, 32, "Item",ExpressionUUID->"c8a86804-6457-4213-87de-a3c110e73444"],
+Cell[937, 32, 194, 3, 32, "Item",ExpressionUUID->"b6809e6b-50c3-4015-bd35-bfa7aa1e9880"],
+Cell[1134, 37, 196, 3, 32, "Item",ExpressionUUID->"d7e3ca7e-3e25-4728-9ae5-69c2aeba13e7"],
+Cell[CellGroupData[{
+Cell[1355, 44, 162, 3, 32, "Item",ExpressionUUID->"0db4d0ed-727f-4ce9-a8a0-ea7b7d275894"],
+Cell[1520, 49, 152, 3, 30, "Input",ExpressionUUID->"d601b124-7191-4c9d-b59a-7a737a272719"],
+Cell[1675, 54, 2353, 61, 213, "Code",ExpressionUUID->"0d1f1ec7-8fb4-442c-8f29-cd0c0adad387"],
+Cell[4031, 117, 1346, 37, 113, "Code",ExpressionUUID->"211e54cf-b093-4d86-b964-48879e24c82e"],
+Cell[5380, 156, 1247, 31, 113, "Code",ExpressionUUID->"50537ff6-7fbd-4b93-b3bc-6e153f8edf93"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
